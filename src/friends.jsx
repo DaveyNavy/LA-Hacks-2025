@@ -1,37 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper } from '@mui/material';
 
-// Mock Data
-const allUsers = [
-    { username: 'Kennedy', profilePic: 'https://via.placeholder.com/40' },
-    { username: 'Aaron', profilePic: 'https://via.placeholder.com/40' },
-    { username: 'Joanna', profilePic: 'https://via.placeholder.com/40' },
-    { username: 'Jomnaq', profilePic: 'https://via.placeholder.com/40' },
-];
+const fetchData = async (url, method = 'GET', body = null) => {
+    const response = await fetch(url, {
+        method,
+        headers: {
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: body ? JSON.stringify(body) : null,
+    });
 
-// Incoming requests mock
-const initialIncomingRequests = [
-    { username: 'David', profilePic: 'https://via.placeholder.com/40' },
-    { username: 'Zavid', profilePic: 'https://via.placeholder.com/40' },
-];
+    if (!response.ok) {
+        throw new Error('API call failed');
+    }
+
+    return response.json();
+};
 
 const Tab2 = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [outgoingRequests, setOutgoingRequests] = useState([]);
-    const [incomingRequests, setIncomingRequests] = useState(initialIncomingRequests);
+    const [incomingRequests, setIncomingRequests] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
+
+    // Fetch incoming requests on component mount
+    useEffect(() => {
+        const fetchIncomingRequests = async () => {
+            try {
+                const data = await fetchData('http://localhost:3000/api/friends/requests');
+                const incomingRequests = data.map((request) => request.requester);
+                setIncomingRequests(incomingRequests); // Assuming the response is an array of incoming requests
+            } catch (error) {
+                console.error('Failed to fetch incoming requests', error);
+            }
+        };
+        fetchIncomingRequests();
+    }, []);
+
+    // Fetch users based on search term
+    useEffect(() => {
+        if (searchTerm.length === 0) return; // Skip if no search term
+        const fetchUsers = async () => {
+            try {
+                const data = await fetchData(`http://localhost:3000/api/users/${searchTerm}`);
+                setAllUsers(data); // Assuming the response is an array of users
+            } catch (error) {
+                console.error('Failed to search users', error);
+            }
+        };
+        fetchUsers();
+    }, [searchTerm]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const handleSendRequest = (user) => {
-        setOutgoingRequests((prev) => [...prev, user]);
-        setSearchTerm(''); // clear search
+    const handleSendRequest = async (user) => {
+        try {
+            const data = await fetchData(`http://localhost:3000/api/users/${user}/request`, 
+                {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": 'application/json',
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({ requester: user.username, response: 'accept' }),
+                })
+            setOutgoingRequests((prev) => [...prev, user]); // Add to outgoing requests
+            setSearchTerm(''); // Clear search
+        } catch (error) {
+            console.error('Failed to send friend request', error);
+        }
     };
 
-    const handleAddBack = (username) => {
-        setIncomingRequests((prev) => prev.filter((user) => user.username !== username));
-        // TO DO: add code to actually add the friend to your friend list
+    const handleAddBack = async (username) => {
+        try {
+            await fetchData(`http://localhost:3000/api/friends/requests/${username}`, 'POST', { response: 'accept' });
+            setIncomingRequests((prev) => prev.filter((user) => user.username !== username));
+        } catch (error) {
+            console.error('Failed to add friend', error);
+        }
+    };
+
+    const handleRejectRequest = async (username) => {
+        try {
+            await fetchData(`http://localhost:3000/api/friends/requests/${username}`, 'POST', { response: 'reject' });
+            setIncomingRequests((prev) => prev.filter((user) => user.username !== username));
+        } catch (error) {
+            console.error('Failed to reject request', error);
+        }
     };
 
     // Filter users for search
@@ -133,9 +192,12 @@ const Tab2 = () => {
 
                 <List>
                     {incomingRequests.map((user, index) => (
-                        <ListItem
-                            key={index}
-                            secondaryAction={
+                        <ListItem key={index}>
+                            <ListItemAvatar>
+                                <Avatar src={user.profilePic} alt={user.username} />
+                            </ListItemAvatar>
+                            <ListItemText primary={user} />
+                            <Box sx={{ display: 'flex', gap: 1 }}>
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -143,12 +205,14 @@ const Tab2 = () => {
                                 >
                                     Add Back
                                 </Button>
-                            }
-                        >
-                            <ListItemAvatar>
-                                <Avatar src={user.profilePic} alt={user.username} />
-                            </ListItemAvatar>
-                            <ListItemText primary={user.username} />
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => handleRejectRequest(user.username)}
+                                >
+                                    Reject
+                                </Button>
+                            </Box>
                         </ListItem>
                     ))}
                 </List>
