@@ -30,4 +30,18 @@ async function createFriendRequest(username, requester) {
     requester,
   ]);
 }
-export { findUser, createUser, findAllUsersLike, createFriendRequest };
+
+async function getAllTasks(username) {
+  const result = await sql.query("SELECT * FROM tasks WHERE username = $1", [
+    username,
+  ]);
+  return result;
+}
+
+export {
+  findUser,
+  createUser,
+  findAllUsersLike,
+  createFriendRequest,
+  getAllTasks,
+};
