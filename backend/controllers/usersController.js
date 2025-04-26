@@ -1,14 +1,17 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { findUser, createUser } from "../model/queries.js";
+import {
+  findUser,
+  createUser,
+  findAllUsersLike,
+  createFriendRequest,
+} from "../model/queries.js";
 
 const loginPagePost = async (req, res) => {
   const { username, password } = req.body;
   const user = await findUser(username);
   if (user) {
-    console.log(password);
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
     if (bcrypt.compare(hashedPassword, user["password"])) {
       jwt.sign({ user }, "secretkey", (err, token) => {
         res.json({
@@ -37,4 +40,32 @@ const registerPagePost = async (req, res) => {
   res.sendStatus(200);
 };
 
-export { loginPagePost, registerPagePost };
+const usersPageGet = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+  const search = req.params.username;
+  const result = await findAllUsersLike(search);
+  res.json(result);
+};
+
+const userRequestPost = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+  const username = req.params.username;
+  await createFriendRequest(username, user["username"]);
+  res.sendStatus(200);
+};
+
+export { loginPagePost, registerPagePost, usersPageGet, userRequestPost };

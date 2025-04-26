@@ -28,3 +28,8 @@ await sql.query(`CREATE TABLE IF NOT EXISTS bets (
     username VARCHAR(255) REFERENCES users(username),
     date DATE
 );`);
+
+await sql.query(`CREATE TABLE IF NOT EXISTS friend_requests (
+    username VARCHAR(255) REFERENCES users(username),
+    requester VARCHAR(255) REFERENCES users(username)
+);`);
