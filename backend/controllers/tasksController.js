@@ -1,5 +1,11 @@
 import jwt from "jsonwebtoken";
-import { getAllTasks, addTask, deleteTask, updateTask, completeTask } from "../model/queries.js";
+import {
+  getAllTasks,
+  addTask,
+  deleteTask,
+  updateTask,
+  completeTask,
+} from "../model/queries.js";
 
 const tasksPageGet = async (req, res) => {
   let user;
@@ -15,6 +21,7 @@ const tasksPageGet = async (req, res) => {
 };
 
 const tasksPagePost = async (req, res) => {
+  console.log("Here");
   let user;
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
@@ -32,9 +39,8 @@ const tasksPagePost = async (req, res) => {
   }
 
   await addTask(username, desc, date);
-
   res.json({ message: "Task added successfully" });
-}
+};
 
 const tasksPageDelete = async (req, res) => {
   let user;
@@ -52,7 +58,7 @@ const tasksPageDelete = async (req, res) => {
   await deleteTask(username, taskId);
 
   res.json({ message: "Task deleted successfully" });
-}
+};
 
 const tasksPagePut = async (req, res) => {
   let user;
@@ -68,14 +74,14 @@ const tasksPagePut = async (req, res) => {
   const taskId = req.params.taskId;
   const { desc } = req.body;
 
-  if (!desc) { 
+  if (!desc) {
     return res.status(400).json({ error: "Description is required" });
   }
 
   await updateTask(username, taskId, desc);
 
   res.json({ message: "Task updated successfully" });
-}
+};
 
 const tasksCompletePost = async (req, res) => {
   let user;
@@ -93,7 +99,12 @@ const tasksCompletePost = async (req, res) => {
   await completeTask(username, taskId);
 
   res.json({ message: "Task completed successfully" });
-}
+};
 
-
-export { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost };
+export {
+  tasksPageGet,
+  tasksPagePost,
+  tasksPageDelete,
+  tasksPagePut,
+  tasksCompletePost,
+};
