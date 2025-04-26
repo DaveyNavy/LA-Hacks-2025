@@ -14,9 +14,22 @@ const Tasks = () => {
         setOpenPopup(true);
     };
 
-    const handleDeleteTask = (index) => {
-        const newTasks = tasks.filter((_, i) => i !== index);
-        setTasks(newTasks);
+    const handleDeleteTask = async (index) => {
+        const taskToDelete = tasks[index];
+        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.taskID}`, {
+            method: "DELETE",
+            headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        if (!data.ok) {
+            // Handle the error if the response is not OK
+            alert("Error deleting task");
+        }
+        else {
+            const newTasks = tasks.filter((_, i) => i !== index);
+            setTasks(newTasks);
+        }
     };
 
     return (
@@ -73,13 +86,13 @@ const Tasks = () => {
                         mode: "cors",
                         body: JSON.stringify({ desc: newtask.taskDescription, date: formattedDate }),
                     });
-                    console.log(data);
                     if (!data.ok) {
                         // Handle the error if the response is not OK
                         alert("Error adding task");
                     }
                     else {
-                        setTasks([...tasks, newtask]);
+                        const taskID = await data.json();
+                        setTasks([...tasks, { ...newtask, taskID }]);
                         setTaskDesc('');
                         setOpenPopup(false);
                     }
