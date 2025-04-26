@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { neon } from "@neondatabase/serverless";
-console.log(process.env);
 const sql = neon(process.env.DATABASE_URL);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS users (
