@@ -3,49 +3,45 @@ import { Box, TextField, Button, Typography } from '@mui/material';
 import Globaler from './global';
 import { useNavigate } from 'react-router-dom';
 
-async function getToken(user, pass) {
-    const data = await fetch("http://localhost:3000/api/users/login", {
+async function tryRegister(user, pass) {
+    const data = await fetch("http://localhost:3000/api/users/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         mode: "cors",
-        body: JSON.stringify({ username: user, password: pass }),
+        body: JSON.stringify({ username: user, password: pass, confirmPassword: pass }),
     });
 
     if (!data.ok) {
         // Handle the error if the response is not OK
-        throw new Error("Login failed");
+        throw new Error("Register failed");
     }
-
-    const response = await data.json();
-    return response["token"];
 }
 
-function Login() {
+function Register() {
     const [user, setUsername] = useState('');
     const [pass, setPassword] = useState('');
+    const [confirmPass, setConfirmPass] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async () => {
-        if (user && pass) {
+        if (user && pass && confirmPass && pass == confirmPass) {
             try {
-                const token = await getToken(user, pass);
+                await tryRegister(user, pass);
                 
-                // Login:
-                Globaler.login(user, token)
-                navigate('/app');                
+                navigate('/login');                
 
                 // Reset any error messages
                 setError('');
             } catch (err) {
                 // Handle login failure
-                setError('Login failed. Please check your credentials.');
+                setError('Register failed. Please try again later.');
                 console.log(err);
             }
         } else {
-            setError('Please enter both username and password');
+            setError('Please make sure passwords match. ');
         }
     };
 
@@ -59,7 +55,7 @@ function Login() {
                 flexDirection: 'column',
             }}
         >
-            <Typography variant="h4" gutterBottom>Login</Typography>
+            <Typography variant="h4" gutterBottom>Register</Typography>
             {error && <Typography color="error" sx={{ marginBottom: 2 }}>{error}</Typography>}
             <TextField
                 label="Username"
@@ -76,11 +72,20 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{ marginBottom: 2, width: '300px' }}
             />
+            <TextField
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                value={confirmPass}
+                onChange={(e) => setConfirmPass(e.target.value)}
+                sx={{ marginBottom: 2, width: '300px' }}
+            />
+
             <Button variant="contained" color="primary" onClick={handleLogin}>
-                Login
+                Continue
             </Button>
-            <Button variant="text" color="secondary" onClick={() => navigate('/register')} sx={{ marginTop: 2 }}>
-                Register
+            <Button variant="text" color="secondary" onClick={() => navigate('/login')} sx={{ marginTop: 2 }}>
+                Back to login
             </Button>
             <Button variant="text" color="secondary" onClick={() => navigate('/')} sx={{ marginTop: 2 }}>
                 Back to Homepage
@@ -89,4 +94,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Register;
