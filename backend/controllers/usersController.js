@@ -11,8 +11,8 @@ const loginPagePost = async (req, res) => {
   const { username, password } = req.body;
   const user = await findUser(username);
   if (user) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    if (bcrypt.compare(hashedPassword, user["password"])) {
+    const match = await bcrypt.compare(password, user["password"]);
+    if (match) {
       jwt.sign({ user }, "secretkey", (err, token) => {
         res.json({
           token,
