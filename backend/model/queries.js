@@ -9,4 +9,12 @@ async function findUser(username) {
   return result[0];
 }
 
-export { findUser };
+async function createUser(username, password) {
+  await sql.query("INSERT INTO users VALUES ($1, $2, $3)", [
+    username,
+    password,
+    0,
+  ]);
+}
+
+export { findUser, createUser };

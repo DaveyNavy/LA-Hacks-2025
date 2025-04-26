@@ -12,8 +12,8 @@ const getFriends = async (req, res) => {
       user = authData["user"];
     }
   });
-  console.log(user);
-  const username = user.username;
+
+  const username = user["username"];
 
   if (!username) {
     return res.status(400).json({ error: "Missing username" });

@@ -1,30 +1,15 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { findUser } from "../model/queries.js";
-
-function verifyToken(req, res, next) {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-}
+import bcrypt from "bcryptjs";
+import { findUser, createUser } from "../model/queries.js";
 
 const loginPagePost = async (req, res) => {
-  console.log(req.body);
   const { username, password } = req.body;
   const user = await findUser(username);
   if (user) {
-    //const hashedPassword = await bcrypt.hash(password, 10);
-    const hashedPassword = password;
+    console.log(password);
+    const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
-    console.log(user["password"]);
-
-    if (hashedPassword == user["password"]) {
+    if (bcrypt.compare(hashedPassword, user["password"])) {
       jwt.sign({ user }, "secretkey", (err, token) => {
         res.json({
           token,
@@ -38,4 +23,18 @@ const loginPagePost = async (req, res) => {
   }
 };
 
-export { loginPagePost };
+const registerPagePost = async (req, res) => {
+  const { username, password, confirmPassword } = req.body;
+
+  if (password != confirmPassword)
+    return res
+      .status(400)
+      .send({ errors: [{ msg: "Passwords do not match" }] });
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  console.log(hashedPassword);
+  createUser(username, hashedPassword);
+  res.sendStatus(200);
+};
+
+export { loginPagePost, registerPagePost };
