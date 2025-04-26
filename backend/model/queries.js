@@ -38,10 +38,28 @@ async function getAllTasks(username) {
   return result;
 }
 
+async function getAllFriends(username) {
+  const result = await sql.query(
+    `SELECT friend FROM friends WHERE username = $1`,
+    [username]
+  );
+  return result;
+}
+
+async function getFriendsTasks(friendUsernames) {
+  const tasks = await sql.query(
+    `SELECT * FROM tasks WHERE username = ANY($1)`,
+    [friendUsernames]
+  );
+  return tasks;
+}
+
 export {
   findUser,
   createUser,
   findAllUsersLike,
   createFriendRequest,
+  getAllFriends,
+  getFriendsTasks,
   getAllTasks,
 };
