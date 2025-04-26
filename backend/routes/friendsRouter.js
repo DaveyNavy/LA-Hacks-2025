@@ -1,10 +1,10 @@
 import Router from "express";
-import { getFriends } from "../controllers/friendsController.js";
+import { getFriends, getFriendsTasks } from "../controllers/friendsController.js";
 const friendsRouter = Router();
 
 friendsRouter.get("/", verifyToken, getFriends);
 
-// router.get('/tasks', getFriendsTasks);
+friendsRouter.get('/tasks', verifyToken, getFriendsTasks);
 
 // router.get('/requests', getFriendRequests);
 
