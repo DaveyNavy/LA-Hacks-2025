@@ -51,7 +51,7 @@ function App() {
                                     {currency}
                                 </Typography>
                                 <img 
-                                    src="https://via.placeholder.com/20" // placeholder coin image
+                                    src="src/assets/betcoin.png" // placeholder coin image
                                     alt="Currency" 
                                     style={{ width: 30, height: 30 }}
                                 />
