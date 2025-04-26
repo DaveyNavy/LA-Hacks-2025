@@ -35,7 +35,6 @@ const registerPagePost = async (req, res) => {
       .send({ errors: [{ msg: "Passwords do not match" }] });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log(hashedPassword);
   createUser(username, hashedPassword);
   res.sendStatus(200);
 };
