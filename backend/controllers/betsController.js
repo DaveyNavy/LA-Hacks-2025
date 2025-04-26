@@ -17,12 +17,11 @@ const betsPagePost = async (req, res)  => {
     const { betAmount, date } = req.body;
 
     const betStatus = await getTaskBet(username, taskId);
-    console.log(betStatus);
 
     if (!betAmount || !date) {
         return res.status(400).json({ error: "Bet amount and date are required" });
     }
-    console.log(betStatus[0].betamount);
+    
     if (betStatus[0].betamount === null) {
         await placeBet(username, taskId, betAmount, date);
     }

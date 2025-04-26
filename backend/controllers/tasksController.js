@@ -40,6 +40,8 @@ const tasksPagePost = async (req, res) => {
 
   const result = await addTask(username, desc, date);
 
+  console.log(result);
+
   res.json(result);
 }
 
