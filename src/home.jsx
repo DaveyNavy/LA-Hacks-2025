@@ -4,6 +4,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
+    
     const navigate = useNavigate();
 
     const scrollToHowItWorks = () => {
@@ -14,7 +15,18 @@ function HomePage() {
     };
 
     return (
-        <Box sx={{ width: '100vw', overflowX: 'hidden'}}>
+        <>
+            <style>
+                {`
+                    html, body {
+                        background: black;
+                        margin: 0;
+                        padding: 0;
+                        overflow-x: hidden;
+                    }
+                `}
+            </style>
+        <Box sx={{ width: '100%', overflowX: 'hidden', overflowY: 'auto' }}>
             {/* header bar */}
             <AppBar
                 position="fixed"
@@ -51,6 +63,7 @@ function HomePage() {
                     pt: 8, // push below the header
                     px: 2,
                     textAlign: 'center',
+                    overflowX: 'hidden',
                 }}
             >
                 <Container maxWidth="md">
@@ -72,7 +85,7 @@ function HomePage() {
                         </Typography>
 
                         <Stack direction="row" spacing={2}>
-                            <Button variant="contained" color="primary" onClick={() => navigate('/createaccount')}>
+                            <Button variant="contained" color="primary" onClick={() => navigate('/register')}>
                                 Sign Up
                             </Button>
                             <Button
@@ -97,6 +110,7 @@ function HomePage() {
                     pt: 12,
                     px: 2,
                     textAlign: 'left',
+                    overflowX: 'hidden',
                 }}
             >
                 <Container maxWidth="md">
@@ -128,7 +142,7 @@ function HomePage() {
                         </List>
 
                         <Stack direction="row" spacing={2}>
-                            <Button variant="contained" color="primary" onClick={() => navigate('/createaccount')}>
+                            <Button variant="contained" color="primary" onClick={() => navigate('/register')}>
                                 Sign Up
                             </Button>
                             <Button variant="outlined" color="primary" onClick={() => navigate('/login')}>
@@ -139,6 +153,7 @@ function HomePage() {
                 </Container>
             </Box>
         </Box>
+        </>
     );
 }
 
