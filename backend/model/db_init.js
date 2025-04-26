@@ -14,16 +14,16 @@ await sql.query(`CREATE TABLE IF NOT EXISTS friends (
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     username VARCHAR(255) REFERENCES users(username),
     description TEXT,
     dueDate DATE,
-    isComplete BOOLEAN,
-    betAmount INTEGER
+    isComplete BOOLEAN DEFAULT FALSE,
+    betAmount INTEGER DEFAULT NULL
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS bets (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     taskId INTEGER REFERENCES tasks(id),
     username VARCHAR(255) REFERENCES users(username),
     date DATE
