@@ -58,7 +58,10 @@ const Tasks = () => {
             <AddTaskPopup
                 open={openPopup}
                 taskDesc={taskDesc}
-                onClose={() => {}}
+                onClose={() => {
+                    setTaskDesc('');
+                    setOpenPopup(false);
+                }}
                 onSubmit={(newtask) => {
                     setTasks([...tasks, newtask]);
                     setTaskDesc('');
