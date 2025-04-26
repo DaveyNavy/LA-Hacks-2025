@@ -9,8 +9,8 @@ await sql.query(`CREATE TABLE IF NOT EXISTS users (
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS friends (
-    username VARCHAR(255),
-    friend VARCHAR(255)
+    username VARCHAR(255) REFERENCES users(username),
+    friend VARCHAR(255) REFERENCES users(username)
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
