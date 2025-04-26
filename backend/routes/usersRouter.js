@@ -1,7 +1,7 @@
 import Router from "express";
-import { loginPageGet } from "../controllers/usersController.js";
+import { loginPagePost } from "../controllers/usersController.js";
 const usersRouter = Router();
 
-usersRouter.get("/login", loginPageGet);
+usersRouter.post("/login", loginPagePost);
 
 export default usersRouter;
