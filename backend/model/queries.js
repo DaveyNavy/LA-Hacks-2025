@@ -76,11 +76,13 @@ async function respondToFriendRequest(username, requester, response) {
 }
 
 async function addTask(username, desc, date) {
-  await sql.query("INSERT INTO tasks (username, description, dueDate) VALUES ($1, $2, $3)", [
+  const result = await sql.query("INSERT INTO tasks (username, description, dueDate) VALUES ($1, $2, $3)", [
     username, 
     desc, 
     date
   ]);
+
+  return result[0].id;
 }
 
 async function deleteTask(username, taskId) {
@@ -105,6 +107,27 @@ async function completeTask(username, taskId) {
   ]);
 }
 
+async function getTaskBet(username, taskId) {
+  const result = await sql.query("SELECT betAmount FROM tasks WHERE username = $1 AND id = $2", [
+    username,
+    taskId,
+  ]);
+  return result;
+}
+
+async function placeBet(username, taskId, betAmount, date) {
+  await sql.query("INSERT INTO bets (username, taskId, date) VALUES ($1, $2, $3)", [
+    username,
+    taskId,
+    date,
+  ]);
+  await sql.query("UPDATE tasks SET betAmount = $1 WHERE username = $2 AND id = $3", [
+    betAmount,
+    username,
+    taskId,
+  ]);
+}
+
 export {
   findUser,
   createUser,
@@ -119,4 +142,6 @@ export {
   deleteTask,
   updateTask,
   completeTask,
+  getTaskBet,
+  placeBet,
 };

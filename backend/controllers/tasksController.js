@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { getAllTasks, addTask, deleteTask, updateTask, completeTask } from "../model/queries.js";
+import { getAllTasks, addTask, deleteTask, updateTask, completeTask, } from "../model/queries.js";
 
 const tasksPageGet = async (req, res) => {
   let user;
@@ -31,9 +31,9 @@ const tasksPagePost = async (req, res) => {
     return res.status(400).json({ error: "Description and date are required" });
   }
 
-  await addTask(username, desc, date);
+  const result = await addTask(username, desc, date);
 
-  res.json({ message: "Task added successfully" });
+  res.json(result);
 }
 
 const tasksPageDelete = async (req, res) => {
@@ -95,5 +95,4 @@ const tasksCompletePost = async (req, res) => {
   res.json({ message: "Task completed successfully" });
 }
 
-
-export { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost };
+export { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost, };

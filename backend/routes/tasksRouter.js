@@ -1,5 +1,5 @@
 import Router from "express";
-import { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost } from "../controllers/tasksController.js";
+import { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost, } from "../controllers/tasksController.js";
 import { verifyToken } from "./utils.js";
 const tasksRouter = Router();
 
