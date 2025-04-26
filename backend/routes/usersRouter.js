@@ -1,8 +1,7 @@
 import Router from "express";
+import { loginPageGet } from "../controllers/usersController.js";
 const usersRouter = Router();
 
-usersRouter.get("/", (req, res) => {
-  res.json({ user: "Hello" });
-});
+usersRouter.get("/login", loginPageGet);
 
 export default usersRouter;
