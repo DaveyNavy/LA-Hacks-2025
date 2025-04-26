@@ -62,11 +62,28 @@ const Tasks = () => {
                     setTaskDesc('');
                     setOpenPopup(false);
                 }}
-                onSubmit={(newtask) => {
-                    setTasks([...tasks, newtask]);
-                    setTaskDesc('');
-                    setOpenPopup(false);
-                }}
+                onSubmit={async (newtask) => {
+                    const formattedDate = newtask.dueDate.toISOString().split('T')[0]; // Convert to "YYYY-MM-DD" format
+                    const data = await fetch("http://localhost:3000/api/tasks", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        mode: "cors",
+                        body: JSON.stringify({ desc: newtask.taskDescription, date: formattedDate }),
+                    });
+                    console.log(data);
+                    if (!data.ok) {
+                        // Handle the error if the response is not OK
+                        alert("Error adding task");
+                    }
+                    else {
+                        setTasks([...tasks, newtask]);
+                        setTaskDesc('');
+                        setOpenPopup(false);
+                    }
+                }}  
             />
         </Container>
     );

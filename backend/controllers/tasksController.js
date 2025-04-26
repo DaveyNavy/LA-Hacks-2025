@@ -38,9 +38,12 @@ const tasksPagePost = async (req, res) => {
     return res.status(400).json({ error: "Description and date are required" });
   }
 
-  await addTask(username, desc, date);
-  res.json({ message: "Task added successfully" });
-};
+  const result = await addTask(username, desc, date);
+
+  console.log(result);
+
+  res.json(result);
+}
 
 const tasksPageDelete = async (req, res) => {
   let user;

@@ -11,7 +11,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
 
     const [dueDate, setDueDate] = useState(null);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!taskDescription || !dueDate) {
             alert('Please fill in all fields.');
             return;
@@ -20,7 +20,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
             alert('Due date cannot be in the past.');
             return;
         }
-        onSubmit({ taskDescription, dueDate });
+        await onSubmit({ taskDescription, dueDate });
         setTaskDescription('');
         setDueDate(null);
         onClose();
