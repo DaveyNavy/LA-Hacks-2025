@@ -18,8 +18,8 @@ await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
     username VARCHAR(255) REFERENCES users(username),
     description TEXT,
     dueDate DATE,
-    isComplete BOOLEAN,
-    betAmount INTEGER
+    isComplete BOOLEAN DEFAULT FALSE,
+    betAmount INTEGER DEFAULT NULL
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS bets (
