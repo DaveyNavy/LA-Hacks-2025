@@ -10,13 +10,38 @@ const Tasks = () => {
     // Popup state
     const [openPopup, setOpenPopup] = useState(false);
 
+
+    // Fetch tasks from the server when the component mounts
+    React.useEffect(() => {
+        const fetchTasks = async () => {
+            const data = await fetch("http://localhost:3000/api/tasks", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            if (!data.ok) {
+                // Handle the error if the response is not OK
+                alert("Error fetching tasks");
+            } else {
+                const fetchedTasks = await data.json();
+                console.log(fetchedTasks);
+                setTasks(fetchedTasks.map(task => ({
+                    ...task,
+                    duedate: new Date(task.duedate),
+                })));
+            }
+        };
+        fetchTasks();
+    }, []);
+
     const handleAddTask = () => {
         setOpenPopup(true);
     };
 
     const handleDeleteTask = async (index) => {
         const taskToDelete = tasks[index];
-        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.taskID}`, {
+        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.id}`, {
             method: "DELETE",
             headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -63,8 +88,8 @@ const Tasks = () => {
                             </IconButton>
                         }
                     >
-                        <ListItemText primary={task.taskDescription} />
-                        <ListItemText primary={task.dueDate.toLocaleDateString()} />
+                        <ListItemText primary={task.description} />
+                        <ListItemText primary={task.duedate.toLocaleDateString()} />
                     </ListItem>
                 ))}
             </List>
@@ -92,7 +117,7 @@ const Tasks = () => {
                     }
                     else {
                         const taskID = await data.json();
-                        setTasks([...tasks, { ...newtask, taskID }]);
+                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), id: taskID }]);
                         setTaskDesc('');
                         setOpenPopup(false);
                     }
