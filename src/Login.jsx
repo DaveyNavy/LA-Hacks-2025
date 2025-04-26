@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
+import Globaler from './global';
+import { useNavigate } from 'react-router-dom';
 
 async function getToken(user, pass) {
     const data = await fetch("http://localhost:3000/api/users/login", {
@@ -20,27 +22,27 @@ async function getToken(user, pass) {
     return response["token"];
 }
 
-function Login({ onLoginSuccess }) {
+function Login() {
     const [user, setUsername] = useState('');
     const [pass, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         if (user && pass) {
             try {
                 const token = await getToken(user, pass);
                 
-                // Save the token in localStorage or sessionStorage
-                localStorage.setItem("token", token);
-
-                // Call the parent function to indicate successful login
-                onLoginSuccess(user);
+                // Login:
+                Globaler.login(user, token)
+                navigate('/app');                
 
                 // Reset any error messages
                 setError('');
             } catch (err) {
                 // Handle login failure
                 setError('Login failed. Please check your credentials.');
+                console.log(err);
             }
         } else {
             setError('Please enter both username and password');
