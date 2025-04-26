@@ -4,6 +4,10 @@ import friendsRouter from "./routes/friendsRouter.js";
 import tasksRouter from "./routes/tasksRouter.js";
 import cors from "cors";
 import multer from "multer";
+import { checkTaskComplete } from "./ai.js";
+import { getTaskDescription } from "./model/queries.js";
+import { unlink } from "node:fs";
+
 // const upload = multer({ dest: "./public/data/uploads/" });
 const app = express();
 app.use(cors());
@@ -27,10 +31,26 @@ let storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.post("/api/uploads", upload.single("uploaded_file"), function (req, res) {
-  // req.file is the name of your file in the form above, here 'uploaded_file'
-  // req.body will hold the text fields, if there were any
-  console.log(req.file.mimetype, req.file.path);
-});
+app.post(
+  "/api/uploads",
+  upload.single("uploaded_file"),
+  async function (req, res) {
+    // req.file is the name of your file in the form above, here 'uploaded_file'
+    // req.body will hold the text fields, if there were any
+    const description = await getTaskDescription(req.body.id);
+    const result = await checkTaskComplete(
+      description,
+      req.file.path,
+      req.file.mimetype
+    );
+
+    console.log(result);
+    // Assuming that 'path/file.txt' is a regular file.
+    unlink(req.file.path, (err) => {
+      if (err) throw err;
+      console.log(req.file.path + " was deleted");
+    });
+  }
+);
 
 app.listen(3000);
