@@ -54,6 +54,27 @@ async function getFriendsTasks(friendUsernames) {
   return tasks;
 }
 
+async function getFriendRequests(username) {
+  const result = await sql.query(
+    `SELECT requester FROM friend_requests WHERE username = $1`,
+    [username]
+  );
+  return result;
+}
+
+async function respondToFriendRequest(username, requester, response) {
+  if (response === "accept") {
+    await sql.query("INSERT INTO friends VALUES ($1, $2)", [
+      username,
+      requester,
+    ]);
+  }
+  await sql.query("DELETE FROM friend_requests WHERE username = $1 AND requester = $2", [
+    username,
+    requester,
+  ]);
+}
+
 export {
   findUser,
   createUser,
@@ -62,4 +83,6 @@ export {
   getAllFriends,
   getFriendsTasks,
   getAllTasks,
+  getFriendRequests,
+  respondToFriendRequest
 };
