@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { getAllTasks } from "../model/queries.js";
+import { getAllTasks, addTask, deleteTask, updateTask, completeTask } from "../model/queries.js";
 
 const tasksPageGet = async (req, res) => {
   let user;
@@ -14,4 +14,86 @@ const tasksPageGet = async (req, res) => {
   res.json(result);
 };
 
-export { tasksPageGet };
+const tasksPagePost = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const { desc, date } = req.body;
+
+  if (!desc || !date) {
+    return res.status(400).json({ error: "Description and date are required" });
+  }
+
+  await addTask(username, desc, date);
+
+  res.json({ message: "Task added successfully" });
+}
+
+const tasksPageDelete = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const taskId = req.params.taskId;
+
+  await deleteTask(username, taskId);
+
+  res.json({ message: "Task deleted successfully" });
+}
+
+const tasksPagePut = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const taskId = req.params.taskId;
+  const { desc } = req.body;
+
+  if (!desc) { 
+    return res.status(400).json({ error: "Description is required" });
+  }
+
+  await updateTask(username, taskId, desc);
+
+  res.json({ message: "Task updated successfully" });
+}
+
+const tasksCompletePost = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const taskId = req.params.taskId;
+
+  await completeTask(username, taskId);
+
+  res.json({ message: "Task completed successfully" });
+}
+
+
+export { tasksPageGet, tasksPagePost, tasksPageDelete, tasksPagePut, tasksCompletePost };
