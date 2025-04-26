@@ -2,6 +2,8 @@ import Router from "express";
 import {
   friendsPageGet,
   friendsTasksPageGet,
+  friendRequestsPageGet,
+  friendRequestPost,
 } from "../controllers/friendsController.js";
 import { verifyToken } from "./utils.js";
 const friendsRouter = Router();
@@ -10,8 +12,8 @@ friendsRouter.get("/", verifyToken, friendsPageGet);
 
 friendsRouter.get("/tasks", verifyToken, friendsTasksPageGet);
 
-// router.get('/requests', getFriendRequests);
+friendsRouter.get('/requests', verifyToken, friendRequestsPageGet);
 
-// router.get('/requests/:username', respondToFriendRequest);
+friendsRouter.get('/requests/:username', verifyToken, friendRequestPost);
 
 export default friendsRouter;
