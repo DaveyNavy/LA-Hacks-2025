@@ -9,4 +9,25 @@ async function findUser(username) {
   return result[0];
 }
 
-export { findUser };
+async function createUser(username, password) {
+  await sql.query("INSERT INTO users VALUES ($1, $2, $3)", [
+    username,
+    password,
+    0,
+  ]);
+}
+
+async function findAllUsersLike(substring) {
+  const result = await sql.query(
+    "SELECT username FROM users WHERE username LIKE " + "'" + substring + "%'"
+  );
+  return result;
+}
+
+async function createFriendRequest(username, requester) {
+  await sql.query("INSERT INTO friend_requests VALUES ($1, $2)", [
+    username,
+    requester,
+  ]);
+}
+export { findUser, createUser, findAllUsersLike, createFriendRequest };

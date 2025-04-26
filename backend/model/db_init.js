@@ -15,6 +15,7 @@ await sql.query(`CREATE TABLE IF NOT EXISTS friends (
 
 await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY,
+    username VARCHAR(255) REFERENCES users(username),
     description TEXT,
     dueDate DATE,
     isComplete BOOLEAN,
@@ -26,4 +27,9 @@ await sql.query(`CREATE TABLE IF NOT EXISTS bets (
     taskId INTEGER REFERENCES tasks(id),
     username VARCHAR(255) REFERENCES users(username),
     date DATE
+);`);
+
+await sql.query(`CREATE TABLE IF NOT EXISTS friend_requests (
+    username VARCHAR(255) REFERENCES users(username),
+    requester VARCHAR(255) REFERENCES users(username)
 );`);

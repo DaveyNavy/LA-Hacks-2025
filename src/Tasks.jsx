@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddTaskPopup from './addtaskpopup';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
-    const [task, setTask] = useState('');
+    const [taskDesc, setTaskDesc] = useState('');
+
+    // Popup state
+    const [openPopup, setOpenPopup] = useState(false);
 
     const handleAddTask = () => {
-        if (task.trim()) {
-            setTasks([...tasks, task]);
-            setTask('');
-        }
+        setOpenPopup(true);
     };
 
     const handleDeleteTask = (index) => {
@@ -21,14 +22,19 @@ const Tasks = () => {
     return (
         <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
             <Typography variant="h4" gutterBottom>
-                To-Do List
+                Your Tasks
             </Typography>
             <TextField
                 fullWidth
                 label="New Task"
                 variant="outlined"
-                value={task}
-                onChange={(e) => setTask(e.target.value)}
+                value={taskDesc}
+                onChange={(e) => setTaskDesc(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        handleAddTask();
+                    }
+                }}
                 style={{ marginBottom: '1rem' }}
             />
             <Button variant="contained" color="primary" onClick={handleAddTask} fullWidth>
@@ -44,10 +50,21 @@ const Tasks = () => {
                             </IconButton>
                         }
                     >
-                        <ListItemText primary={task} />
+                        <ListItemText primary={task.taskDescription} />
+                        <ListItemText primary={task.dueDate.toLocaleDateString()} />
                     </ListItem>
                 ))}
             </List>
+            <AddTaskPopup
+                open={openPopup}
+                taskDesc={taskDesc}
+                onClose={() => {}}
+                onSubmit={(newtask) => {
+                    setTasks([...tasks, newtask]);
+                    setTaskDesc('');
+                    setOpenPopup(false);
+                }}
+            />
         </Container>
     );
 };
