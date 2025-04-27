@@ -89,11 +89,13 @@ const Tab1 = () => {
                             "Authorization": `Bearer ${localStorage.getItem("token")}`,
                         },
                         mode: "cors",
-                        body: JSON.stringify({ betAmount: betAmount, date: dueDate }),
+                        body: JSON.stringify({ betAmount: Number(betAmount), date: dueDate }),
                     });
                     if (!data.ok) {
                         // Handle the error if the response is not OK
-                        alert("Error placing bet");
+                        const json = await data.json();
+                        console.log(json);
+                        alert("Error placing bet: " + json.error);
                     }
                     else {
                         const result = await data.json();

@@ -13,6 +13,10 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
     const [taskDescription, setTaskDescription] = useState(taskDesc || '');
     React.useEffect(() => {
         setTaskDescription(taskDesc || '');
+        // update duedate and textfield value:
+        const newDate = new Date(now.getTime() + 1 * 60 * 1000);
+        setDueDate(newDate);
+        setTextFieldValue(format(newDate, 'yyyy-MM-dd HH:mm'));
     }, [taskDesc]);
 
     const [dueDate, setDueDate] = useState(new Date(now.getTime() + 1 * 60 * 1000));

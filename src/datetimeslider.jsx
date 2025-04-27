@@ -14,6 +14,12 @@ const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
     // Calculate total seconds between now and future date
     const totalSeconds = differenceInSeconds(endDate, now);
 
+
+    React.useEffect(() => {
+        setDueDate(futureDate);
+        setTextFieldValue(format(futureDate, 'yyyy-MM-dd HH:mm'));
+    }, [futureDate]);
+
     // State for the current selected value (in seconds from now)
     const [value, setValue2] = useState(0);
     const setValue = (newValue) => {
