@@ -195,6 +195,21 @@ async function getUserInfo(username) {
   return result;
 }
 
+async function getBets(taskId) {
+  const result = await sql.query(
+    "SELECT * FROM bets WHERE taskId = $1",
+    [taskId]
+  );
+  return result;
+}
+
+async function updateUserCurrency(username, newBalance) {
+  await sql.query("UPDATE users SET currency = $1 WHERE username = $2", [
+    newBalance,
+    username,
+  ]);
+}
+
 export {
   findUser,
   createUser,
@@ -214,4 +229,6 @@ export {
   getTaskBet,
   placeBet,
   getUserInfo,
+  getBets,
+  updateUserCurrency
 };
