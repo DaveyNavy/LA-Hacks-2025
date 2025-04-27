@@ -84,23 +84,23 @@ function Login() {
         sx={{ marginBottom: 2, width: "300px" }}
       />
       <Button variant="contained" color="primary" onClick={handleLogin}>
-        Login
+        <b>Login</b>
       </Button>
       <Button
         variant="text"
-        color="secondary"
+        color="primary"
         onClick={() => navigate("/register")}
         sx={{ marginTop: 2 }}
       >
-        Register
+        <b>Register</b>
       </Button>
       <Button
         variant="text"
-        color="secondary"
+        color="primary"
         onClick={() => navigate("/")}
-        sx={{ marginTop: 2 }}
+        sx={{ marginTop: 1 }}
       >
-        Back to Homepage
+        <b>Back to Homepage</b>
       </Button>
     </Box>
   );

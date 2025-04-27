@@ -5,3 +5,6 @@ Set-up:
 
 Run:
 `npm run dev`
+
+Font:
+`npm install @fontsource/poppins`
