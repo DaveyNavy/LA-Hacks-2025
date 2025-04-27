@@ -59,6 +59,7 @@ const usersPageGet = async (req, res) => {
   });
   const search = req.params.username;
   const result = await findAllUsersLike(search);
+
   res.json(result);
 };
 
@@ -96,4 +97,19 @@ const userInfoGet = async (req, res) => {
   res.json(result);
 }
 
-export { loginPagePost, registerPagePost, usersPageGet, userRequestPost, userInfoGet };
+const currentUserGet = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  return user;
+}
+
+
+
+export { loginPagePost, registerPagePost, usersPageGet, userRequestPost, userInfoGet, currentUserGet };
