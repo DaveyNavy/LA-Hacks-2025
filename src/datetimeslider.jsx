@@ -19,6 +19,7 @@ const DateTimeSlider = ({ futureDate, setDueDate }) => {
     const setValue = (newValue) => {
         setValue2(newValue);
         const newDate = addSeconds(now, newValue);
+        newDate.setSeconds(0, 0);
         setDueDate(newDate);
     }
     const [textFieldValue, setTextFieldValue] = useState(format(now, 'yyyy-MM-dd HH:mm'));
