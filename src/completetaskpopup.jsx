@@ -13,28 +13,29 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
 
     console.log('CompleteTaskPopup', taskToComplete);
 
-    const handleSubmit = async () => {
-        if (isSubmitting) return; // Prevent multiple submissions
-        isSubmitting = true;
+    const handleSubmit = async (event) => {
+        const form = event.target.closest('form'); // Find the closest form ancestor
+        if (!form) return; // Ensure the form exists
+        const formData = new FormData(form); // Collect form data
+        try {
+            const response = await fetch("http://localhost:3000/api/uploads", {
+                method: "POST",
+                body: formData,
+            });
 
-        const data = await fetch(`${host_url}/api/tasks/${taskToComplete.taskid}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
-        if (!data.ok) {
-            // Handle the error if the response is not OK
-            alert("Error completing task");
-        } else {
-            const newTasks = tasks.filter((_, i) => i !== index);
-            setTasks(newTasks);
+            if (!response.ok) {
+                alert("Error uploading file");
+            } else {
+                // alert("File uploaded successfully");
+                console.log("File uploaded successfully");
+                onSubmit(taskid); // Call the onSubmit function with the task ID
+                onClose(); // Close the popup after submission
+            }
+            console.log(await response.json());
+
+        } catch (error) {
+            console.error("Error:", error);
         }
-        
-
-        await onSubmit({ taskid });
-        onClose();
-        isSubmitting = false;
     };
 
     if (!username) {
@@ -56,7 +57,8 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                     borderRadius: 2,
                 }}
             >
-                <Typography variant="h3">Complete Task</Typography>                <TextField
+                <Typography variant="h3">Complete Task</Typography>
+                <TextField
                     fullWidth
                     label="Task Description"
                     variant="outlined"
@@ -65,19 +67,36 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                     contentEditable={false}
                 />
 
-
+                {/* Embedded Form */}
+                <form
+                    action="http://localhost:3000/api/uploads"
+                    encType="multipart/form-data"
+                    method="post"
+                    // onSubmit={handleSubmit}
+                >
+                    <div className="form-group">
+                        <input
+                            type="file"
+                            className="form-control-file"
+                            name="uploaded_file"
+                        />
+                        <input type="number" name="id" hidden value={taskid || 4} readOnly={true} />
+                    </div>
+                    {/* <button type="submit">Upload</button> */}
+                    <Button variant="contained" onClick={handleSubmit}>
+                        Complete Task
+                    </Button>
+                </form>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button onClick={onClose} sx={{ mr: 1 }}>
                         Cancel
                     </Button>
-                    <Button variant="contained" onClick={handleSubmit}>
-                        Complete Task
-                    </Button>
+
                 </Box>
             </Box>
         </Modal>
     );
-};
+};;
 
 export default CompleteTaskPopup;

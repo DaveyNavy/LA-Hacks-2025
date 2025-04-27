@@ -40,6 +40,7 @@ app.post(
     // req.file is the name of your file in the form above, here 'uploaded_file'
     // req.body will hold the text fields, if there were any
     const description = await getTaskDescription(req.body.id);
+    console.log(description)
     const result = await checkTaskComplete(
       description,
       req.file.path,
@@ -52,6 +53,12 @@ app.post(
       if (err) throw err;
       console.log(req.file.path + " was deleted");
     });
+
+    if (result) {
+      res.status(200).json({ message: "File uploaded successfully" });
+    } else {
+      res.status(400).json({ message: "File upload failed" });
+    }
   }
 );
 
