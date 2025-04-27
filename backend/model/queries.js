@@ -159,6 +159,10 @@ async function completeTask(username, taskId) {
     "UPDATE tasks SET isComplete = true WHERE username = $1 AND id = $2",
     [username, taskId]
   );
+  await sql.query(
+    "UPDATE users SET numOfTasksCompleted = numOfTasksCompleted + 1 WHERE username = $1",
+    [username]
+  );
 }
 
 async function getTaskDescription(taskId) {
@@ -187,6 +191,14 @@ async function placeBet(username, taskId, betAmount, date) {
   ]);
 }
 
+async function getUserInfo(username) {
+  const result = await sql.query(
+    "SELECT * FROM users WHERE username = $1",
+    [username]
+  );
+  return result;
+}
+
 export {
   findUser,
   createUser,
@@ -205,4 +217,5 @@ export {
   getTaskDescription,
   getTaskBet,
   placeBet,
+  getUserInfo,
 };

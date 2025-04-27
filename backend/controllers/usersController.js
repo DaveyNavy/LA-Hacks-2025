@@ -5,6 +5,7 @@ import {
   createUser,
   findAllUsersLike,
   createFriendRequest,
+  getUserInfo,
 } from "../model/queries.js";
 
 const loginPagePost = async (req, res) => {
@@ -67,4 +68,19 @@ const userRequestPost = async (req, res) => {
   res.sendStatus(200);
 };
 
-export { loginPagePost, registerPagePost, usersPageGet, userRequestPost };
+const userInfoGet = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const result = await getUserInfo(username);
+  res.json(result);
+}
+
+export { loginPagePost, registerPagePost, usersPageGet, userRequestPost, userInfoGet };
