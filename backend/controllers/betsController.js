@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { getTaskBet, placeBet, getUserInfo, updateUserCurrency } from "../model/queries.js";
+import { getTaskBet, placeBet, getUserInfo, updateUserCurrency, getBets, getUsernameFromTaskId } from "../model/queries.js";
 import jwt from "jsonwebtoken";
 
 const betsPagePost = async (req, res)  => {
@@ -23,8 +23,24 @@ const betsPagePost = async (req, res)  => {
     }
 
     const userInfo = await getUserInfo(username);
+    console.log(userInfo[0].currency);
+    console.log(betAmount);
+    console.log(userInfo[0].currency < betAmount);
     if (userInfo[0].currency < betAmount) {
-        return res.status(400).json({ error: "Not enough currency" });
+      console.log("Not enough currency");
+      return res.status(400).json({ error: "Not enough currency" });
+    }
+
+    const bets = await getBets(taskId);
+    const betUsernames = bets.map((bet) => bet.username);
+
+    if (betUsernames.includes(username)) {
+        return res.status(400).json({ error: "You have already placed a bet" });
+    }
+
+    const taskOwner = await getUsernameFromTaskId(taskId);
+    if (taskOwner == username) {
+        return res.status(400).json({ error: "You cannot place a bet on your own task" });
     }
 
     if (betStatus[0].betamount == null || betStatus[0].betamount == betAmount) {

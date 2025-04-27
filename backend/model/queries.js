@@ -215,6 +215,14 @@ async function updateUserCurrency(username, newBalance) {
   ]);
 }
 
+async function getUsernameFromTaskId(taskId) {
+  const result = await sql.query(
+    "SELECT username FROM tasks WHERE id = $1",
+    [taskId]
+  );
+  return result[0].username;
+}
+
 export {
   findUser,
   createUser,
@@ -235,5 +243,6 @@ export {
   placeBet,
   getUserInfo,
   getBets,
-  updateUserCurrency
+  updateUserCurrency,
+  getUsernameFromTaskId,
 };
