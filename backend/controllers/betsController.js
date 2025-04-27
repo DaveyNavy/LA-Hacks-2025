@@ -22,12 +22,11 @@ const betsPagePost = async (req, res)  => {
         return res.status(400).json({ error: "Bet amount and date are required" });
     }
 
-    
-    if (betStatus[0].betamount == null) {
+    if (betStatus[0].betamount == null || betStatus[0].betamount == betAmount) {
         await placeBet(username, taskId, betAmount, date);
     }
     else {
-        return res.status(400).json({ error: "Bet already placed for this task" });
+        return res.status(400).json({ error: "Bad bet" });
     }
 }
 
