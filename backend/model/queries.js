@@ -60,7 +60,9 @@ async function getAllTasks(username) {
 
 async function getAllFriends(username) {
   const result = await sql.query(
-    `SELECT friend FROM friends WHERE username = $1`,
+    `SELECT users.username, users.currency, users.numoftaskscompleted 
+    FROM friends JOIN users ON users.username = friends.friend
+    WHERE friends.username = $1 `,
     [username]
   );
   return result;
@@ -94,6 +96,14 @@ async function getFriendsTasks(friendUsernames) {
 async function getFriendRequests(username) {
   const result = await sql.query(
     `SELECT requester FROM friend_requests WHERE username = $1`,
+    [username]
+  );
+  return result;
+}
+
+async function getOutgoingRequests(username) {
+  const result = await sql.query(
+    `SELECT username FROM friend_requests WHERE requester = $1`,
     [username]
   );
   return result;
@@ -167,11 +177,10 @@ async function getTaskBet(taskId) {
 }
 
 async function placeBet(username, taskId, betAmount, date) {
-  await sql.query("INSERT INTO bets (username, taskId, date) VALUES ($1, $2, $3)", [
-    username,
-    taskId,
-    date,
-  ]);
+  await sql.query(
+    "INSERT INTO bets (username, taskId, date) VALUES ($1, $2, $3)",
+    [username, taskId, date]
+  );
   await sql.query("UPDATE tasks SET betAmount = $1 WHERE id = $2", [
     betAmount,
     taskId,
@@ -187,6 +196,7 @@ export {
   getFriendsTasks,
   getAllTasks,
   getFriendRequests,
+  getOutgoingRequests,
   respondToFriendRequest,
   addTask,
   deleteTask,
