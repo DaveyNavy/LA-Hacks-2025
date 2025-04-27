@@ -4,6 +4,7 @@ import {
   getFriendsTasks,
   getFriendRequests,
   respondToFriendRequest,
+  getOutgoingRequests,
 } from "../model/queries.js";
 import jwt from "jsonwebtoken";
 
@@ -58,6 +59,22 @@ const friendRequestsPageGet = async (req, res) => {
   res.json(requests);
 };
 
+const friendsOutgoingPageGet = async (req, res) => {
+  let user;
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+
+  const username = user["username"];
+  const requests = await getOutgoingRequests(username);
+
+  res.json(requests);
+};
+
 const friendRequestPost = async (req, res) => {
   let user;
   jwt.verify(req.token, "secretkey", (err, authData) => {
@@ -93,5 +110,6 @@ export {
   friendsPageGet,
   friendsTasksPageGet,
   friendRequestsPageGet,
+  friendsOutgoingPageGet,
   friendRequestPost,
 };
