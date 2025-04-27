@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Box, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import BetTaskPopup from './bettaskpopup';
 import { Globaler, host_url } from './global.jsx';
 
@@ -68,31 +68,82 @@ const Tab1 = () => {
     };
 
     return (
-        <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
-            <Typography variant="h4" gutterBottom>
+        <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+            <Box
+                    sx={{
+                      flex: 1,
+                      position: "relative",
+                      padding: 1.5,
+                    }}
+                  >
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
                 Bet on Tasks
             </Typography>
+            
             <List style={{ marginTop: '1rem' }}>
                 {tasks.map((task, index) => (
                     <ListItem 
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: 1.5,
+                            marginBottom: 2,
+                            border: (theme) => `1px solid ${theme.palette.border}`,
+                            borderRadius: '4px',
+                            width: '100%',
+                        }}
                         key={index} 
                         button="true"
                         onClick={() => handleBetTask(index)} 
                         style={{ transition: 'background-color 0.3s' }}
                     >
-                        <ListItemText primary={task.username} />
-                        <ListItemText primary={task.description} />
-                        <ListItemText primary={task.duedate.toLocaleString('en-US', {
-                            weekday: 'long',
-                            month: 'numeric',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                        })} />
-                        <ListItemText primary={`Number of Bets: ${task.bets ? task.bets.length : 0}`} />
+                        {/* Left column - Takes 4/5ths of the width */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '70%', marginRight: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <Typography variant="h6"><b><u>{task.username}</u></b></Typography>
+                                <Typography variant="body2" sx={{ textAlign: 'right' }}>
+                                    <b>Due: </b>
+                                    { task.duedate.toLocaleString('en-US', {
+                                        weekday: 'long',
+                                        month: 'numeric',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                    })}
+                                </Typography>
+                            </Box>
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    marginTop: 1,
+                                    overflow: 'hidden',       // Hides overflowed content
+                                    textOverflow: 'ellipsis', // Adds "..." at the end of truncated text
+                                    width: 500
+                                }}
+                            >
+                                {task.description}
+                            </Typography>
+
+                        </Box>
+                        {/* Right column - Takes 1/5th of the width */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%', alignItems: 'flex-end', borderLeft: '1px solid', paddingLeft: 3, paddingRight: 1, alignContent:'center' }}>
+                            <Typography variant="body2">
+                                Number of Bets: {task.bets ? task.bets.length : 0}
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                onClick={() => handleBetTask(index)}
+                                sx={{ marginTop: 1, width: '100%'}}
+                            >
+                                Bet Now
+                            </Button>
+                        </Box>
                     </ListItem>
                 ))}
             </List>
+
+            </Box>
             <BetTaskPopup
                 open={openPopup}
                 selectedTask={selectedTask}
@@ -128,7 +179,7 @@ const Tab1 = () => {
                     }
                 }}
             />
-        </Container>
+        </Box>
     );
 };
 

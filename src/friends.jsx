@@ -57,7 +57,9 @@ const Tab2 = () => {
     const fetchUsers = async () => {
       try {
         const data = await fetchData(`${host_url}/api/users/${searchTerm}`);
-        setAllUsers(data); // Assuming the response is an array of users
+        const user = await fetchData(`${host_url}/api/users/${searchTerm}/info`);
+        const username = user.username;
+        setAllUsers(data.filter((user) => user.username !== username));  // Assuming the response is an array of users
       } catch (error) {
         console.error("Failed to search users", error);
       }
