@@ -37,19 +37,18 @@ const upload = multer({ storage: storage });
 
 app.post(
   "/api/uploads",
-  upload.single("uploaded_file"), verifyToken,
+  upload.single("uploaded_file"),
+  verifyToken,
   async function (req, res) {
     // req.file is the name of your file in the form above, here 'uploaded_file'
     // req.body will hold the text fields, if there were any
     const description = await getTaskDescription(req.body.id);
-    console.log(description)
     const result = await checkTaskComplete(
       description,
       req.file.path,
       req.file.mimetype
     );
 
-    console.log(result);
     // Assuming that 'path/file.txt' is a regular file.
     unlink(req.file.path, (err) => {
       if (err) throw err;
