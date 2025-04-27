@@ -9,6 +9,7 @@ import { checkTaskComplete } from "./ai.js";
 import { getTaskDescription } from "./model/queries.js";
 import { unlink } from "node:fs";
 import { tasksCompletePost } from "./controllers/tasksController.js";
+import { verifyToken } from "./routes/utils.js";
 
 // const upload = multer({ dest: "./public/data/uploads/" });
 const app = express();
@@ -36,7 +37,7 @@ const upload = multer({ storage: storage });
 
 app.post(
   "/api/uploads",
-  upload.single("uploaded_file"),
+  upload.single("uploaded_file"), verifyToken,
   async function (req, res) {
     // req.file is the name of your file in the form above, here 'uploaded_file'
     // req.body will hold the text fields, if there were any
@@ -56,10 +57,8 @@ app.post(
     });
 
     if (result == "yes") {
-      res.setHeader("Authorization", req.headers.authorization);
+      req.params.taskId = req.body.id;
       await tasksCompletePost(req, res);
-      res.status(200).json({ message: "File uploaded successfully" });
-
     } else {
       res.status(400).json({ message: "File does not meet requirements." });
     }

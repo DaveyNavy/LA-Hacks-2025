@@ -141,7 +141,7 @@ const tasksCompletePost = async (req, res) => {
 
   await completeTask(username, taskId);
 
-  res.json({ message: "Task completed successfully" });
+  res.status(200).json({ message: "Task completed successfully" });
 };
 
 export {
