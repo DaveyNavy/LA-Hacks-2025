@@ -54,7 +54,7 @@ const Tab1 = () => {
                 {tasks.map((task, index) => (
                     <ListItem 
                         key={index} 
-                        button 
+                        button="true"
                         onClick={() => handleBetTask(index)} 
                         style={{ transition: 'background-color 0.3s' }}
                     >
@@ -79,6 +79,9 @@ const Tab1 = () => {
                     setOpenPopup(false);
                 }}
                 onSubmit={async ({betAmount, dueDate, taskid}) => {
+                    console.log("Bet amount:", betAmount);
+                    console.log("Due date:", dueDate);
+                    console.log("Task ID:", taskid);
                     const data = await fetch(`${host_url}/api/bets/${taskid}`, {
                         method: "POST",
                         headers: {

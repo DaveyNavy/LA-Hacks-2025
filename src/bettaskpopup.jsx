@@ -27,7 +27,11 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
         return distance;
     }
 
-    const [betAmount, setBetAmount] = useState(betamount || 0);
+    const [betAmount, setBetAmount] = useState(betamount || 100);
+    React.useEffect(() => {
+        setBetAmount(betamount || 100);
+    }, [betamount]);
+
     const handleBetAmountChange = (event) => {
         setBetAmount(event.target.value);
     };
@@ -66,7 +70,7 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                 />
                 <Typography variant="h6">Due in {getRelativeDate(duedate)}</Typography>
 
-                <DateTimeSlider futureDate={duedate} setDueDate={setDueDate} />
+                <DateTimeSlider futureDate={duedate} setDueDate={setDueDate} username={username} />
 
                 <TextField
                     fullWidth
@@ -76,7 +80,8 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                     value={betAmount}
                     onChange={handleBetAmountChange}
                     type="number"
-                    inputProps={{ min: 0, step: 1 }}
+                    disabled={betamount !== undefined}
+                    inputProps={{ min: 100, step: 50, max: 1000 }}
                 />
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>

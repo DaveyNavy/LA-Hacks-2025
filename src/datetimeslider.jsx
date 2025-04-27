@@ -6,7 +6,7 @@ import { format, parseISO, addSeconds, differenceInSeconds } from 'date-fns';
 import { Globaler, host_url } from './global.jsx';
 
 
-const DateTimeSlider = ({ futureDate, setDueDate }) => {
+const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
     // Convert futureDate to Date object if it's a string
     const endDate = typeof futureDate === 'string' ? parseISO(futureDate) : new Date(futureDate);
     const now = new Date();
@@ -86,8 +86,8 @@ const DateTimeSlider = ({ futureDate, setDueDate }) => {
                 max={totalSeconds}
                 step={60 * 15} // 15-minute steps
                 marks={generateMarks()}
-                valueLabelDisplay="auto"
-                valueLabelFormat={formatValueText}
+                // valueLabelDisplay="auto"
+                // valueLabelFormat={formatValueText}
             />
 
             <TextField
@@ -106,17 +106,18 @@ const DateTimeSlider = ({ futureDate, setDueDate }) => {
                 margin="normal"
             />
 
-            <div style={{ marginTop: '20px' }}>
+            {/* <div style={{ marginTop: '20px' }}>
                 <Button
                     variant="contained"
                     onClick={handleButtonClick}
                 >
                     Log Selected Date
                 </Button>
-            </div>
+            </div> */}
 
             <div style={{ marginTop: '10px', color: '#666' }}>
-                Selected: {format(currentDate, 'PPPPpppp')}
+                {/* You bet that {username} will complete their task at: {format(currentDate, 'PPPPpppp')} */}
+                You bet that {username} will complete their task as close to this date as possible.
             </div>
         </div>
     );

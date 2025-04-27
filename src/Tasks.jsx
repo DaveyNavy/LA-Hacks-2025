@@ -47,7 +47,7 @@ const Tasks = () => {
 
     const handleDeleteTask = async (index) => {
         const taskToDelete = tasks[index];
-        const data = await fetch(`${host_url}api/tasks/${taskToDelete.taskid}`, {
+        const data = await fetch(`${host_url}/api/tasks/${taskToDelete.taskid}`, {
             method: "DELETE",
             headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -88,7 +88,7 @@ const Tasks = () => {
                 {tasks.map((task, index) => (
                     <ListItem
                         key={index}
-                        button
+                        button="true"
                         onClick={() => alert(`Task clicked: ${task.description}`)}
                         style={{ transition: 'background-color 0.3s' }}
                         secondaryAction={
