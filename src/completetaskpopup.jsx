@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Modal, Box, TextField, Button, CircularProgress } from "@mui/material";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TimePicker } from "@mui/x-date-pickers";
@@ -23,6 +23,14 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
     if (!form) return; // Ensure the form exists
     const formData = new FormData(form); // Collect form data
     try {
+      const response = await fetch(`${host_url}/api/uploads`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       const json = await response.json();
       console.log(json);
 
@@ -40,10 +48,6 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
 
     setLoading(false); // Reset loading state
   };
-
-  if (!username) {
-    return null; // Render nothing if no task is selected
-  }
 
   if (!username) {
     return null; // Render nothing if no task is selected
@@ -85,7 +89,6 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
           action={`${host_url}/api/uploads`}
           encType="multipart/form-data"
           method="post"
-          // onSubmit={handleSubmit}
         >
           <div className="form-group">
             <input
@@ -102,7 +105,6 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
             />
           </div>
           <br></br>
-          {/* <button type="submit">Upload</button> */}
           <Button variant="contained" onClick={handleSubmit} disabled={loading}>
             {loading ? (
               <Box
@@ -121,7 +123,7 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
         </form>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-          <Button onClick={onClose} sx={{ mr: 1 }}>
+          <Button onClick={onClose} sx={{ mr: 1 }} disabled={loading}>
             Cancel
           </Button>
         </Box>
