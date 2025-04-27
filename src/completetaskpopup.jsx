@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react';
-import { Modal, Box, TextField, Button } from '@mui/material';
+import { Modal, Box, TextField, Button, CircularProgress } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
@@ -11,9 +11,14 @@ import { Globaler, host_url } from './global.jsx';
 const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
     const { username, description, duedate, betamount, taskid } = taskToComplete || {};
 
+    const [loading, setLoading] = useState(false);
+
     console.log('CompleteTaskPopup', taskToComplete);
 
     const handleSubmit = async (event) => {
+        if (loading) return; // Prevent multiple submissions
+        setLoading(true); // Set loading state
+
         const form = event.target.closest('form'); // Find the closest form ancestor
         if (!form) return; // Ensure the form exists
         const formData = new FormData(form); // Collect form data
@@ -43,6 +48,8 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
         } catch (error) {
             console.error("Error:", error);
         }
+
+        setLoading(false); // Reset loading state
     };
 
     if (!username) {
@@ -83,7 +90,6 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                     action="http://localhost:3000/api/uploads"
                     encType="multipart/form-data"
                     method="post"
-                    // onSubmit={handleSubmit}
                 >
                     <div className="form-group">
                         <input
@@ -94,17 +100,31 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                         <input type="number" name="id" hidden value={taskid || 4} readOnly={true} />
                     </div>
                     <br></br>
-                    {/* <button type="submit">Upload</button> */}
-                    <Button variant="contained" onClick={handleSubmit}>
-                        Complete Task
+                    <Button
+                        variant="contained"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <CircularProgress size={24} />
+                            </Box>
+                        ) : (
+                            'Complete Task'
+                        )}
                     </Button>
                 </form>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                    <Button onClick={onClose} sx={{ mr: 1 }}>
+                    <Button onClick={onClose} sx={{ mr: 1 }} disabled={loading}>
                         Cancel
                     </Button>
-
                 </Box>
             </Box>
         </Modal>
