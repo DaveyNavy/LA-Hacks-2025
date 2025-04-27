@@ -37,7 +37,7 @@ const friendsTasksPageGet = async (req, res) => {
   const username = user["username"];
 
   const friends = await getAllFriends(username);
-  const friendUsernames = friends.map((friend) => friend.friend);
+  const friendUsernames = friends.map((friend) => friend.username);
   const result = await getFriendsTasks(friendUsernames);
 
   res.json(result);
