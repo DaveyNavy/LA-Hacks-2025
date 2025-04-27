@@ -35,7 +35,9 @@ const registerPagePost = async (req, res) => {
   const usernames = users.map((user) => user.username);
   if (usernames.includes(username)) {
     console.log("Username already exists");
-    return res.status(400).send({ errors: [{ msg: "Username already exists" }] });
+    return res
+      .status(400)
+      .send({ errors: [{ msg: "Username already exists" }] });
   }
 
   if (password != confirmPassword)
@@ -59,6 +61,7 @@ const usersPageGet = async (req, res) => {
   });
   const search = req.params.username;
   const result = await findAllUsersLike(search);
+
   res.json(result);
 };
 
@@ -74,7 +77,9 @@ const userRequestPost = async (req, res) => {
   const username = req.params.username;
 
   if (username == user["username"]) {
-    return res.status(400).json({ error: "You cannot send a friend request to yourself" });
+    return res
+      .status(400)
+      .json({ error: "You cannot send a friend request to yourself" });
   }
 
   await createFriendRequest(username, user["username"]);
@@ -94,6 +99,32 @@ const userInfoGet = async (req, res) => {
   const username = user["username"];
   const result = await getUserInfo(username);
   res.json(result);
-}
+};
 
-export { loginPagePost, registerPagePost, usersPageGet, userRequestPost, userInfoGet };
+const currentUserGet = async (req, res) => {
+  let user;
+  console.log("LELELE", user);
+
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      user = authData["user"];
+    }
+  });
+  user = {
+    username: user.username,
+    curr: user.currency,
+    numTasks: user.numoftaskscompleted,
+  };
+  res.json(user);
+};
+
+export {
+  loginPagePost,
+  registerPagePost,
+  usersPageGet,
+  userRequestPost,
+  userInfoGet,
+  currentUserGet,
+};

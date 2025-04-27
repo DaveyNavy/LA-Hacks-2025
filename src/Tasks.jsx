@@ -7,6 +7,25 @@ import { Globaler, host_url } from './global.jsx';
 import { set } from 'date-fns';
 import CompleteTaskPopup from './completetaskpopup.jsx';
 
+const refreshUserInfo = async () => {
+    const response = await fetch(`${host_url}/api/users/${Globaler.username}/info`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        console.log(data[0].currency);
+        Globaler.setCurrency(parseInt(data[0].currency, 10)); // Update currency as integer
+        localStorage.setItem("currency", data[0].currency); // Persist in localStorage
+    } else {
+        console.error("Failed to refresh user info");
+    }
+}
 
 const Tasks = () => {
     const [tasks, setTasks2] = useState([]);
@@ -40,6 +59,7 @@ const Tasks = () => {
         const taskToComplete = tasks.find(task => task.taskid === taskid);
         taskToComplete.iscomplete = true;
         setTasks([...tasks]);
+        refreshUserInfo();
         return;
     }
 
@@ -184,7 +204,7 @@ const Tasks = () => {
                     }
                     else {
                         const taskID = await data.json();
-                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID, iscomplete: false }]);
+                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID, iscomplete: false, username: localStorage.getItem("username") }]);
                         setTaskDesc('');
                         setOpenPopup_add(false);
                     }

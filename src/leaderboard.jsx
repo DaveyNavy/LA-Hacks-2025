@@ -9,7 +9,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Globaler, host_url } from "./global.jsx";
-import coin from "../public/betcoin.png";
+import coin from "/betcoin.png";
 
 // Mapping backend fields to friendly names
 const FIELD_MAPPING = {
@@ -21,11 +21,12 @@ const FIELD_MAPPING = {
 const Tab3 = () => {
   const [friends, setFriends] = useState([]);
   const [sortBy, setSortBy] = useState("currency");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await fetch(`${host_url}/api/friends`, {
+        let response = await fetch(`${host_url}/api/friends`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
@@ -33,13 +34,22 @@ const Tab3 = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
+        let data = await response.json();
         const mappedData = data.map((friend) => ({
           username: friend.username,
           curr: friend.currency,
           numTasks: friend.numoftaskscompleted,
         }));
-        setFriends(mappedData);
+
+        response = await fetch(`${host_url}/api/users/self`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        data = await response.json();
+        setUser(data);
+        setFriends([...mappedData, data]);
+        console.log(friends);
       } catch (error) {
         console.error("Error fetching friends:", error);
       }
@@ -61,67 +71,74 @@ const Tab3 = () => {
     return b[field] - a[field];
   });
 
-    return (
-        <Box sx={{ padding: 2 }}>
-            {/* Dropdown for selecting sort criteria */}
-            <FormControl fullWidth
-                sx={{ 
-                    marginTop: 1,
-                    marginBottom: 3,
-                    height: '64px', // match Box height (padding + font size considered)
-                }}>
-                <InputLabel>Sort By</InputLabel>
-                <Select
-                    value={sortBy}
-                    label="Sort By"
-                    onChange={handleChange}
-                    MenuProps={{
-                    PaperProps: {
-                        sx: {
-                        backgroundColor: (theme) => theme.palette.background.default2,
-                        },
-                    },
-                    }}
-                    sx={{
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    }}
-                >
-                    <MenuItem value="currency">BetCoin</MenuItem>
-                    <MenuItem value="tasks">Tasks Completed</MenuItem>
-                    <MenuItem value="username">Username (A-Z)</MenuItem>
-                </Select>
-                </FormControl>
+  return (
+    <Box sx={{ padding: 2 }}>
+      {/* Dropdown for selecting sort criteria */}
+      <FormControl
+        fullWidth
+        sx={{
+          marginTop: 1,
+          marginBottom: 3,
+          height: "64px", // match Box height (padding + font size considered)
+        }}
+      >
+        <InputLabel>Sort By</InputLabel>
+        <Select
+          value={sortBy}
+          label="Sort By"
+          onChange={handleChange}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: (theme) => theme.palette.background.default2,
+              },
+            },
+          }}
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <MenuItem value="currency">BetCoin</MenuItem>
+          <MenuItem value="tasks">Tasks Completed</MenuItem>
+          <MenuItem value="username">Username (A-Z)</MenuItem>
+        </Select>
+      </FormControl>
 
-            {/* Conditional rendering */}
-            {sortedFriends.length === 0 ? (
-                <Typography variant="body1" align="center" color="text.secondary">
-                    No friends added yet
-                </Typography>
-            ) : (
-                sortedFriends.map((friend, index) => (
-                    <Box
-                        key={index}
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: 2,
-                            marginBottom: 2,
-                            border: (theme) => `1px solid ${theme.palette.border}`,
-                            borderRadius: '4px',
-                        }}
-                    >
-                        {/* Left side: Avatar + Username */}
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Avatar
-                                src={`https://ui-avatars.com/api/?name=${friend.username}`}
-                                alt={friend.username}
-                                sx={{ width: 30, height: 30, marginRight: 2 }}
-                            />
-                            <Typography variant="body1">{friend.username}</Typography>
-                        </Box>
+      {/* Conditional rendering */}
+      {sortedFriends.length === 0 ? (
+        <Typography variant="body1" align="center" color="text.secondary">
+          No friends added yet
+        </Typography>
+      ) : (
+        sortedFriends.map((friend, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: 2,
+              marginBottom: 2,
+              border:
+                friend != user
+                  ? (theme) => `1px solid ${theme.palette.border}`
+                  : (theme) => `1px solid ${theme.palette.primary.main}`,
+              bgcolor:
+                friend != user ? "background.default" : "primary.default2",
+              borderRadius: "4px",
+            }}
+          >
+            {/* Left side: Avatar + Username */}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar
+                src={`https://ui-avatars.com/api/?name=${friend.username}`}
+                alt={friend.username}
+                sx={{ width: 30, height: 30, marginRight: 2 }}
+              />
+              <Typography variant="body1">{friend.username}</Typography>
+            </Box>
 
             {/* Right side: Currency or Tasks */}
             <Box sx={{ display: "flex", alignItems: "center" }}>

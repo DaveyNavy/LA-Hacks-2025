@@ -10,6 +10,26 @@ const Tab1 = () => {
         const sortedTasks = newTasks.sort((a, b) => a.duedate - b.duedate);
         setTasks2(sortedTasks);
     };
+
+    const refreshUserInfo = async () => {
+        const response = await fetch(`${host_url}/api/users/${Globaler.username}/info`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            console.log(data[0].currency);
+            Globaler.setCurrency(parseInt(data[0].currency, 10)); // Update currency as integer
+            localStorage.setItem("currency", data[0].currency); // Persist in localStorage
+        } else {
+            console.error("Failed to refresh user info");
+        }
+    }
     
     // Popup state
     const [openPopup, setOpenPopup] = useState(false);
@@ -155,6 +175,7 @@ const Tab1 = () => {
                         console.log(result);
                         setSelectedTask(null);
                         setOpenPopup(false);
+                        refreshUserInfo();
                     }
                 }}
             />
