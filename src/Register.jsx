@@ -84,11 +84,11 @@ function Register() {
             <Button variant="contained" color="primary" onClick={handleLogin}>
                 Continue
             </Button>
-            <Button variant="text" color="secondary" onClick={() => navigate('/login')} sx={{ marginTop: 2 }}>
-                Back to login
+            <Button variant="text" color="primary" onClick={() => navigate('/login')} sx={{ marginTop: 2 }}>
+                <b>Back to login</b>
             </Button>
-            <Button variant="text" color="secondary" onClick={() => navigate('/')} sx={{ marginTop: 2 }}>
-                Back to Homepage
+            <Button variant="text" color="primary" onClick={() => navigate('/')} sx={{ marginTop: 2 }}>
+                <b>Back to Homepage</b>
             </Button>
         </Box>
     );

@@ -56,14 +56,35 @@ const Tab3 = () => {
     return (
         <Box sx={{ padding: 2 }}>
             {/* Dropdown for selecting sort criteria */}
-            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+            <FormControl fullWidth
+                sx={{ 
+                    marginTop: 1,
+                    marginBottom: 3,
+                    height: '64px', // match Box height (padding + font size considered)
+                }}>
                 <InputLabel>Sort By</InputLabel>
-                <Select value={sortBy} label="Sort By" onChange={handleChange}>
+                <Select
+                    value={sortBy}
+                    label="Sort By"
+                    onChange={handleChange}
+                    MenuProps={{
+                    PaperProps: {
+                        sx: {
+                        backgroundColor: (theme) => theme.palette.background.default2,
+                        },
+                    },
+                    }}
+                    sx={{
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    }}
+                >
                     <MenuItem value="currency">BetCoin</MenuItem>
                     <MenuItem value="tasks">Tasks Completed</MenuItem>
                     <MenuItem value="username">Username (A-Z)</MenuItem>
                 </Select>
-            </FormControl>
+                </FormControl>
 
             {/* Conditional rendering */}
             {sortedFriends.length === 0 ? (
@@ -80,9 +101,8 @@ const Tab3 = () => {
                             justifyContent: 'space-between',
                             padding: 2,
                             marginBottom: 2,
-                            border: '1px solid #ddd',
-                            borderRadius: '12px',
-                            backgroundColor: '#fafafa',
+                            border: (theme) => `1px solid ${theme.palette.border}`,
+                            borderRadius: '4px',
                         }}
                     >
                         {/* Left side: Avatar + Username */}
@@ -90,7 +110,7 @@ const Tab3 = () => {
                             <Avatar
                                 src={`https://ui-avatars.com/api/?name=${friend.username}`}
                                 alt={friend.username}
-                                sx={{ width: 40, height: 40, marginRight: 2 }}
+                                sx={{ width: 30, height: 30, marginRight: 2 }}
                             />
                             <Typography variant="body1">{friend.username}</Typography>
                         </Box>

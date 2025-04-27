@@ -158,7 +158,7 @@ const Tab2 = () => {
         sx={{
           flex: 1,
           position: "relative",
-          padding: 2,
+          padding: 1.5,
           borderBottom: "1px solid #ccc",
         }}
       >
@@ -187,11 +187,15 @@ const Tab2 = () => {
                 maxHeight: 200,
                 overflowY: "auto",
                 zIndex: 10,
+                backgroundColor: (theme) => theme.palette.background.default2
               }}
             >
               <List>
                 {filteredUsers.map((user, index) => (
-                  <ListItem
+                  <ListItem 
+                  sx={{
+                    padding: 1.5,
+                  }}
                     key={index}
                     secondaryAction={
                       <Button
@@ -207,7 +211,11 @@ const Tab2 = () => {
                     }
                   >
                     <ListItemAvatar>
-                      <Avatar src={user.profilePic} alt={user.username} />
+                      <Avatar
+                        src={`https://ui-avatars.com/api/?name=${user.username}`}
+                        alt={user.username}
+                        sx={{ width: 30, height: 30, marginRight: 2 }}
+                      />
                     </ListItemAvatar>
                     <ListItemText primary={user.username} />
                   </ListItem>
@@ -223,19 +231,32 @@ const Tab2 = () => {
             marginTop: 2,
             height: "calc(100% - 100px)", // adjust to leave space for search bar
             overflowY: "auto",
-            paddingRight: 1,
           }}
         >
           {outgoingRequests.length > 0 && (
             <>
-              <Typography variant="subtitle1" sx={{ marginBottom: 1 }}>
+              <Typography variant="h6" sx={{ marginBottom: 1 }}>
                 Pending Requests
               </Typography>
               <List>
                 {outgoingRequests.map((user, index) => (
-                  <ListItem key={index}>
+                  <ListItem key={index}
+                  sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: 1.5,
+                            marginBottom: 2,
+                            border: (theme) => `1px solid ${theme.palette.border}`,
+                            borderRadius: '4px',
+                        }}
+                    >
                     <ListItemAvatar>
-                      <Avatar src={user.profilePic} alt={user.username} />
+                      <Avatar
+                        src={`https://ui-avatars.com/api/?name=${user.username}`}
+                        alt={user.username}
+                        sx={{ width: 30, height: 30, marginRight: 2 }}
+                      />
                     </ListItemAvatar>
                     <ListItemText primary={user.username} />
                     <Typography variant="body2" sx={{ color: "gray" }}>
@@ -257,9 +278,23 @@ const Tab2 = () => {
 
         <List>
           {incomingRequests.map((username, index) => (
-            <ListItem key={index}>
+            <ListItem key={index}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 1.5,
+              marginBottom: 2,
+              border: (theme) => `1px solid ${theme.palette.border}`,
+              borderRadius: '4px',
+          }}
+      >
               <ListItemAvatar>
-                <Avatar alt={username} />
+                <Avatar
+                  src={`https://ui-avatars.com/api/?name=${username}`}
+                  alt={username}
+                  sx={{ width: 30, height: 30, marginRight: 2 }}
+                />
               </ListItemAvatar>
               <ListItemText primary={username} />
               <Box sx={{ display: "flex", gap: 1 }}>
@@ -272,7 +307,7 @@ const Tab2 = () => {
                 </Button>
                 <Button
                   variant="outlined"
-                  color="error"
+                  color="#ffffff"
                   onClick={() => handleRejectRequest(username)}
                 >
                   Reject

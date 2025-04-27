@@ -6,6 +6,7 @@ import Login from "./Login";
 import Home from "./home";
 import Register from "./Register";
 import { Globaler, host_url } from "./global.jsx";
+import { ThemeContextProvider } from './theme.jsx';
 
 // Create your router configuration
 const router = createBrowserRouter([
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 
 // Mount the app with RouterProvider
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <ThemeContextProvider>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  </ThemeContextProvider>
 );

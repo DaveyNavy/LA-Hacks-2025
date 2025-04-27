@@ -58,13 +58,13 @@ function HomePage() {
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
                     <Typography
                         variant="h6"
-                        sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+                        sx={{ cursor: 'pointer', fontWeight: 'bold', color: 'white' }}
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     >
-                        BeBetter
+                        <b>BeBetter</b>
                     </Typography>
-                    <Button color="inherit" onClick={() => navigate('/login')}>
-                        Login
+                    <Button color="primary" onClick={() => navigate('/login')}>
+                        <b>Login</b>
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -107,14 +107,14 @@ function HomePage() {
 
                         <Stack direction="row" spacing={2}>
                             <Button variant="contained" color="primary" onClick={() => navigate('/register')}>
-                                Sign Up
+                                <b>Sign Up</b>
                             </Button>
                             <Button
                                 variant="outlined"
                                 sx={{ color: 'white', borderColor: 'white' }}
                                 onClick={scrollToHowItWorks}
                             >
-                                Learn More
+                                 <b>Learn More</b>
                             </Button>
                         </Stack>
                     </Stack>
@@ -125,7 +125,7 @@ function HomePage() {
             <Box
                 id="how-it-works"
                 sx={{
-                    minHeight: '80vh',
+                    minHeight: '90vh',
                     backgroundColor: 'white',
                     color: 'black',
                     pt: 12,
@@ -165,11 +165,20 @@ function HomePage() {
 
                         <Stack direction="row" spacing={2}>
                             <Button variant="contained" color="primary" onClick={() => navigate('/register')}>
-                                Sign Up
+                                <b>Sign Up</b>
                             </Button>
-                            <Button variant="outlined" color="primary" onClick={() => navigate('/login')}>
-                                Login
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => navigate('/login')}
+                                sx={{
+                                    borderWidth: 1.5,
+                                    borderColor: 'primary.main',
+                                }}
+                                >
+                                <b>Login</b>
                             </Button>
+
                         </Stack>
                     </Stack>
                 </Container>
