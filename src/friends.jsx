@@ -1,6 +1,6 @@
-import { Globaler, host_url } from './global.jsx';
+import { Globaler, host_url } from "./global.jsx";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   Box,
   Typography,
@@ -36,15 +36,14 @@ const Tab2 = () => {
   const [outgoingRequests, setOutgoingRequests] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [allFriends, setAllFriends] = useState([]);
 
   // Fetch incoming requests on component mount
   useEffect(() => {
     const fetchIncomingRequests = async () => {
       try {
-        const data = await fetchData(
-          `${host_url}/api/friends/requests`
-        );
-        setIncomingRequests(data.map((request) => request.requester)); 
+        const data = await fetchData(`${host_url}/api/friends/requests`);
+        setIncomingRequests(data.map((request) => request.requester));
       } catch (error) {
         console.error("Failed to fetch incoming requests", error);
       }
@@ -57,9 +56,7 @@ const Tab2 = () => {
     if (searchTerm.length === 0) return; // Skip if no search term
     const fetchUsers = async () => {
       try {
-        const data = await fetchData(
-          `${host_url}/api/users/${searchTerm}`
-        );
+        const data = await fetchData(`${host_url}/api/users/${searchTerm}`);
         setAllUsers(data); // Assuming the response is an array of users
       } catch (error) {
         console.error("Failed to search users", error);
@@ -67,6 +64,30 @@ const Tab2 = () => {
     };
     fetchUsers();
   }, [searchTerm]);
+
+  useEffect(() => {
+    const fetchOutgoingRequests = async () => {
+      try {
+        const data = await fetchData(`${host_url}/api/friends/outgoing`);
+        setOutgoingRequests(data); // Assuming the response is an array of users
+      } catch (error) {
+        console.error("Failed to search outgoing requests", error);
+      }
+    };
+    fetchOutgoingRequests();
+  }, []);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const data = await fetchData(`${host_url}/api/friends`);
+        setAllFriends(data); // Assuming the response is an array of users
+      } catch (error) {
+        console.error("Failed to fetch friends", error);
+      }
+    };
+    fetchFriends();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -126,10 +147,8 @@ const Tab2 = () => {
   };
 
   // Filter users for search
-  const filteredUsers = allUsers.filter(
-    (user) =>
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !outgoingRequests.some((req) => req.username === user.username)
+  const filteredUsers = allUsers.filter((user) =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -178,6 +197,10 @@ const Tab2 = () => {
                       <Button
                         variant="contained"
                         onClick={() => handleSendRequest(user)}
+                        disabled={outgoingRequests
+                          .concat(allFriends)
+                          .map((e) => e.username)
+                          .includes(user.username)}
                       >
                         Send Request
                       </Button>
