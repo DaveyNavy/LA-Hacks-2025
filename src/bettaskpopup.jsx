@@ -80,7 +80,7 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                     value={betAmount}
                     onChange={handleBetAmountChange}
                     type="number"
-                    disabled={betamount !== undefined}
+                    disabled={betamount !== null}
                     inputProps={{ min: 100, step: 50, max: 1000 }}
                 />
 
