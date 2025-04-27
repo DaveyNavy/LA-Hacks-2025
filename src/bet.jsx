@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddTaskPopup from './addtaskpopup';
+import BetTaskPopup from './bettaskpopup';
 
 const Tab1 = () => {
     const [tasks, setTasks2] = useState([]);
@@ -9,10 +8,10 @@ const Tab1 = () => {
         const sortedTasks = newTasks.sort((a, b) => a.duedate - b.duedate);
         setTasks2(sortedTasks);
     };
-    const [taskDesc, setTaskDesc] = useState('');
-
+    
     // Popup state
     const [openPopup, setOpenPopup] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
 
     // Fetch tasks from the server when the component mounts
@@ -39,7 +38,8 @@ const Tab1 = () => {
         fetchTasks();
     }, []);
 
-    const handleAddTask = () => {
+    const handleBetTask = (index) => {
+        setSelectedTask(tasks[index]);
         setOpenPopup(true);
     };
 
@@ -53,7 +53,7 @@ const Tab1 = () => {
                     <ListItem 
                         key={index} 
                         button 
-                        onClick={() => alert(`Task clicked: ${task.description}`)} 
+                        onClick={() => handleBetTask(index)} 
                         style={{ transition: 'background-color 0.3s' }}
                     >
                         <ListItemText primary={task.username} />
@@ -69,11 +69,11 @@ const Tab1 = () => {
                     </ListItem>
                 ))}
             </List>
-            <AddTaskPopup
+            <BetTaskPopup
                 open={openPopup}
-                taskDesc={taskDesc}
+                selectedTask={selectedTask}
                 onClose={() => {
-                    setTaskDesc('');
+                    setSelectedTask(null);
                     setOpenPopup(false);
                 }}
                 onSubmit={async (newtask) => {

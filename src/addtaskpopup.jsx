@@ -4,14 +4,32 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
 import { Typography } from '@mui/material';
+import { format } from 'date-fns';
+
 
 const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
+    const now = new Date();
     const [taskDescription, setTaskDescription] = useState(taskDesc || '');
     React.useEffect(() => {
         setTaskDescription(taskDesc || '');
     }, [taskDesc]);
 
     const [dueDate, setDueDate] = useState(null);
+    const [textFieldValue, setTextFieldValue] = useState(format(now, 'yyyy-MM-dd HH:mm'));
+    const handleTextFieldChange = (event) => {
+        setTextFieldValue(event.target.value);
+        try {
+            const newDate = parseISO(event.target.value);
+            if (newDate >= now && newDate <= endDate) {
+                const newValue = differenceInSeconds(newDate, now);
+                setValue(newValue);
+            }
+        } catch (e) {
+            console.error("Invalid date format");
+        }
+    };
+
+
 
     let isSubmitting = false;
     const handleSubmit = async () => {
@@ -63,20 +81,20 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
                         }
                     }}
                 />
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Due Date"
-                        value={dueDate}
-                        onChange={(newValue) => setDueDate(newValue)}
-                        renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
-                    />
-                    <TimePicker
-                        label="Due Time"
-                        value={dueDate}
-                        onChange={(newValue) => setDueDate(newValue)}
-                        renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
-                    />
-                </LocalizationProvider>
+                <TextField
+                    label="Select Date & Time"
+                    type="datetime-local"
+                    value={dueDate}
+                    onChange={handleTextFieldChange}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    inputProps={{
+                        min: format(new Date(), 'yyyy-MM-dd HH:mm'),
+                    }}
+                    fullWidth
+                    margin="normal"
+                />
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button onClick={onClose} sx={{ mr: 1 }}>
