@@ -3,7 +3,7 @@ import { Modal, Box, TextField, Button } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
-
+import { Typography } from '@mui/material';
 
 const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
     const [taskDescription, setTaskDescription] = useState(taskDesc || '');
@@ -50,8 +50,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
                     borderRadius: 2,
                 }}
             >
-                <h2>Add New Task</h2>
-                <TextField
+                <Typography variant="h3">Add New Task</Typography>                <TextField
                     fullWidth
                     label="Task Description"
                     variant="outlined"
