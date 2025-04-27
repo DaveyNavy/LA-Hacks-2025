@@ -127,10 +127,6 @@ async function respondToFriendRequest(username, requester, response) {
 }
 
 async function addTask(username, desc, date) {
-  await sql.query(
-    "INSERT INTO tasks (username, description, dueDate) VALUES ($1, $2, $3)",
-    [username, desc, date]
-  );
   const result = await sql.query(
     `INSERT INTO tasks (username, description, dueDate) VALUES ($1, $2, $3)
     RETURNING id`,
