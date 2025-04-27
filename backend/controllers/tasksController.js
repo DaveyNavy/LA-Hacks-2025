@@ -5,6 +5,10 @@ import {
   deleteTask,
   updateTask,
   completeTask,
+  getBets,
+  getTaskBet,
+  getUserInfo,
+  updateUserCurrency,
 } from "../model/queries.js";
 
 const tasksPageGet = async (req, res) => {
@@ -98,6 +102,42 @@ const tasksCompletePost = async (req, res) => {
 
   const username = user["username"];
   const taskId = req.params.taskId;
+  const currDate = new Date();
+
+  const bets = await getBets(taskId);
+  const betDates = bets.map((bet) => bet.date);
+  const betUsers = bets.map((bet) => bet.username);
+  const taskBet = await getTaskBet(taskId);
+  const betAmount = taskBet[0].betamount;
+
+  let minBet = 8640000000000000;
+  for (let i = 0; i < betDates.length; i++) {
+    const betDate = new Date(betDates[i]);
+    const diffTime = Math.abs(currDate - betDate);
+    if (diffTime < minBet) {
+      minBet = diffTime;
+    }
+  }
+
+  let minBets = [];
+  for (let i = 0; i < betUsers.length; i++) {
+    const betDate = new Date(betDates[i]);
+    const diffTime = Math.abs(currDate - betDate);
+    if (diffTime == minBet) {
+      minBets.push(betUsers[i]);
+    }
+  }
+
+  const winnerAmount = (betUsers.length *  betAmount) / minBets.length;
+
+  for (let i = 0; i < minBets.length; i++) {
+    const winner = await getUserInfo(minBets[i]);
+    await updateUserCurrency(minBets[i], winner[0].currency + winnerAmount);
+  }
+
+  const userInfo = await getUserInfo(username);
+
+  await updateUserCurrency(username, userInfo[0].currency + 100);
 
   await completeTask(username, taskId);
 
