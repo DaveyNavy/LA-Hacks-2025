@@ -5,7 +5,7 @@ import App from './App';
 import Login from './login';
 import Home from './home';
 import Register from './Register';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 // Create your router configuration
 const router = createBrowserRouter([

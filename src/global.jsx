@@ -1,4 +1,4 @@
-import "dotenv/config";
+
 
 class Global {
     constructor() {
@@ -46,4 +46,6 @@ class Global {
 
 const Globaler = new Global();
 
-export default Globaler;
+const host_url = "http://localhost:3000";
+
+export { Globaler, host_url };

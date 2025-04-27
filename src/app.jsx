@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/material';
 import Tasks from './Tasks.jsx';
 import TabSelector from './TabSelector.jsx';
-import Globaler from './global.jsx';
+import { Globaler, host_url } from './global.jsx';
 import { useNavigate } from 'react-router-dom';
-import "dotenv/config";
+
 
 function App() {
     // Login routing:

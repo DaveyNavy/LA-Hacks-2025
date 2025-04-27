@@ -3,7 +3,7 @@ import { Box, Button, Typography, AppBar, Toolbar, Container, Stack, List, ListI
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 function HomePage() {
     

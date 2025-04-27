@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
-import Globaler from './global';
+import { Globaler, host_url } from './global';
 import { useNavigate } from 'react-router-dom';
-import "dotenv/config";
 
 async function getToken(user, pass) {
     const data = await fetch(`${host_url}/api/users/login`, {

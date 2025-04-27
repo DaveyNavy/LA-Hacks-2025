@@ -1,4 +1,4 @@
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 import React, { useState, useEffect } from "react";
 import {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Avatar, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 // Mapping backend fields to friendly names
 const FIELD_MAPPING = {

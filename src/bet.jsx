@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import BetTaskPopup from './bettaskpopup';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 
 const Tab1 = () => {

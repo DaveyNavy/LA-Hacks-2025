@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddTaskPopup from './addtaskpopup';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 
 const Tasks = () => {

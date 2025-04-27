@@ -3,7 +3,7 @@ import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { format, parseISO, addSeconds, differenceInSeconds } from 'date-fns';
-import "dotenv/config";
+import { Globaler, host_url } from './global.jsx';
 
 
 const DateTimeSlider = ({ futureDate, setDueDate }) => {
