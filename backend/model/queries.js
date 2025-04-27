@@ -33,9 +33,28 @@ async function createFriendRequest(username, requester) {
 }
 
 async function getAllTasks(username) {
-  const result = await sql.query("SELECT * FROM tasks WHERE username = $1", [
-    username,
-  ]);
+  const result = await sql.query(
+    `
+    SELECT 
+      tasks.id AS taskId,
+      tasks.username,
+      tasks.description,
+      tasks.dueDate,
+      tasks.isComplete,
+      tasks.betAmount,
+      COALESCE(
+        json_agg(
+          json_build_object('username', bets.username, 'date', bets.date)
+        ) FILTER (WHERE bets.username IS NOT NULL),
+        '[]'
+      ) AS bets
+    FROM tasks
+    LEFT JOIN bets ON tasks.id = bets.taskId
+    WHERE tasks.username = $1
+    GROUP BY tasks.id
+    `,
+    [username]
+  );
   return result;
 }
 
@@ -48,11 +67,28 @@ async function getAllFriends(username) {
 }
 
 async function getFriendsTasks(friendUsernames) {
-  const tasks = await sql.query(
-    `SELECT * FROM tasks WHERE username = ANY($1)`,
+  const result = await sql.query(
+    `SELECT 
+      tasks.id AS taskId,
+      tasks.username,
+      tasks.description,
+      tasks.dueDate,
+      tasks.isComplete,
+      tasks.betAmount,
+      COALESCE(
+        json_agg(
+          json_build_object('username', bets.username, 'date', bets.date)
+        ) FILTER (WHERE bets.username IS NOT NULL),
+        '[]'
+      ) AS bets
+    FROM tasks
+    LEFT JOIN bets ON tasks.id = bets.taskId
+    WHERE tasks.username = ANY($1)
+    GROUP BY tasks.id`,
     [friendUsernames]
   );
-  return tasks;
+
+  return result;
 }
 
 async function getFriendRequests(username) {
@@ -123,23 +159,23 @@ async function getTaskDescription(taskId) {
   return result;
 }
 
-async function getTaskBet(username, taskId) {
-  const result = await sql.query(
-    "SELECT betAmount FROM tasks WHERE username = $1 AND id = $2",
-    [username, taskId]
-  );
+async function getTaskBet(taskId) {
+  const result = await sql.query("SELECT betAmount FROM tasks WHERE id = $1", [
+    taskId,
+  ]);
   return result;
 }
 
 async function placeBet(username, taskId, betAmount, date) {
-  await sql.query(
-    "INSERT INTO bets (username, taskId, date) VALUES ($1, $2, $3)",
-    [username, taskId, date]
-  );
-  await sql.query(
-    "UPDATE tasks SET betAmount = $1 WHERE username = $2 AND id = $3",
-    [betAmount, username, taskId]
-  );
+  await sql.query("INSERT INTO bets (username, taskId, date) VALUES ($1, $2, $3)", [
+    username,
+    taskId,
+    date,
+  ]);
+  await sql.query("UPDATE tasks SET betAmount = $1 WHERE id = $2", [
+    betAmount,
+    taskId,
+  ]);
 }
 
 export {
