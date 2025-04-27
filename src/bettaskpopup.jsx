@@ -15,7 +15,7 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
     const handleSubmit = async () => {
         if (isSubmitting) return; // Prevent multiple submissions
         isSubmitting = true;
-        await onSubmit({ betAmount, dueDate });
+        await onSubmit({ betAmount, dueDate, taskid });
         onClose();
         isSubmitting = false;
     };

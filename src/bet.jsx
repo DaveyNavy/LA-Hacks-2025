@@ -76,24 +76,23 @@ const Tab1 = () => {
                     setSelectedTask(null);
                     setOpenPopup(false);
                 }}
-                onSubmit={async (newtask) => {
-                    const formattedDate = newtask.dueDate.toISOString().split('T')[0]; // Convert to "YYYY-MM-DD" format
-                    const data = await fetch("http://localhost:3000/api/tasks", {
+                onSubmit={async (betAmount, dueDate, taskid) => {
+                    const data = await fetch(`http://localhost:3000/api/bets/${taskid}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${localStorage.getItem("token")}`,
                         },
                         mode: "cors",
-                        body: JSON.stringify({ desc: newtask.taskDescription, date: formattedDate }),
+                        body: JSON.stringify({ betAmount: betAmount, date: dueDate }),
                     });
                     if (!data.ok) {
                         // Handle the error if the response is not OK
-                        alert("Error adding task");
+                        alert("Error placing bet");
                     }
                     else {
-                        const taskID = await data.json();
-                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID }]);
+                        const result = await data.json();
+                        console.log(result);
                         setTaskDesc('');
                         setOpenPopup(false);
                     }
