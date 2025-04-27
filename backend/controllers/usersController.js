@@ -103,8 +103,6 @@ const userInfoGet = async (req, res) => {
 
 const currentUserGet = async (req, res) => {
   let user;
-  console.log("LELELE", user);
-
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
       res.sendStatus(403);

@@ -49,7 +49,6 @@ const Tab3 = () => {
         data = await response.json();
         setUser(data);
         setFriends([...mappedData, data]);
-        console.log(friends);
       } catch (error) {
         console.error("Error fetching friends:", error);
       }

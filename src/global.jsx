@@ -46,6 +46,6 @@ class Global {
 
 const Globaler = new Global();
 
-// const host_url = "http://18.116.67.236:3000";
-const host_url = "http://localhost:3000";
+const host_url = "http://18.116.67.236:3000";
+//const host_url = "http://localhost:3000";
 export { Globaler, host_url };
