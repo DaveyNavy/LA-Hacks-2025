@@ -61,17 +61,17 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
             <Box
                 sx={{
                     position: 'absolute',
+                    width: 500,
+                    bgcolor: 'background.default',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 4,
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                    borderRadius: 2,
                 }}
             >
-                <Typography variant="h3">Add New Task</Typography>                <TextField
+                <Typography variant="h5">Add New Task</Typography>                <TextField
                     fullWidth
                     label="Task Description"
                     variant="outlined"
@@ -101,7 +101,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button onClick={onClose} sx={{ mr: 1 }}>
-                        Cancel
+                        <b>Cancel</b>
                     </Button>
                     <Button variant="contained" onClick={handleSubmit}>
                         Add Task

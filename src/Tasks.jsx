@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
+import { Container, Box, Typography, TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ClearIcon } from '@mui/x-date-pickers';
 import AddTaskPopup from './addtaskpopup';
 import { Globaler, host_url } from './global.jsx';
 import { set } from 'date-fns';
 import CompleteTaskPopup from './completetaskpopup.jsx';
+import { Tooltip } from '@mui/material';
+
 
 const refreshUserInfo = async () => {
     const response = await fetch(`${host_url}/api/users/${Globaler.username}/info`, {
@@ -115,6 +117,7 @@ const Tasks = () => {
             <Typography variant="h4" gutterBottom>
                 Your Tasks
             </Typography>
+            
             <TextField
                 fullWidth
                 label="New Task"
@@ -128,52 +131,86 @@ const Tasks = () => {
                 }}
                 style={{ marginBottom: '1rem' }}
             />
+            <br></br>
+            
             <Button variant="contained" color="primary" onClick={handleAddTask} fullWidth>
                 Add Task
             </Button>
-            <List style={{ marginTop: '1rem' }}>
+            <br></br>
+            <List>
                 {tasks.map((task, index) => (
                     <ListItem
                         key={index}
-                        button="true"
-                        // onClick={() => alert(`Task clicked: ${task.description}`)}
-                        style={{ transition: 'background-color 0.3s' }}
-                        // secondaryAction={
-                        //     <IconButton edge="end" aria-label="delete" onClick={(e) => {
-                        //         handleDeleteTask(index);
-                        //         e.stopPropagation();
-                        //     }}>
-                        //         <DeleteIcon />
-                        //     </IconButton>
-                        // }
-                        secondaryAction={
-                            <>
-                                <IconButton edge="end" aria-label="complete" onClick={(e) => {
-                                    // Handle checkbox click logic here
-                                    e.stopPropagation();
-                                }}>
-                                    <Checkbox onClick={() => { handleCheckboxClick(index) }} disabled={getDisabled(index)} checked={getChecked(index)} />
-                                </IconButton>
-                                <IconButton edge="end" aria-label="delete" onClick={(e) => {
-                                    handleDeleteTask(index);
-                                    e.stopPropagation();
-                                }}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </>
-                        }
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            padding: 1.5,
+                            borderBottom: '1px solid',
+                        }}
                     >
-                        <ListItemText primary={task.description} />
-                        <ListItemText primary={task.duedate.toLocaleString('en-US', {
-                            weekday: 'long',
-                            month: 'numeric',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                        })} />
-                        {task.bets && task.bets.map((bet, betIndex) => (
-                            <ListItemText key={betIndex} primary={`User: ${bet.username}`} />
-                        ))}
+                        {/* Checkbox on the left */}
+                        <Checkbox 
+                            onClick={() => handleCheckboxClick(index)} 
+                            checked={task.iscomplete} 
+                            disabled={task.iscomplete}
+                            sx={{ marginRight: 2 }} 
+                        />
+                        
+                        {/* Task description */}
+                        <Box sx={{ flex: 1 }}>
+                            <Typography variant="body1" sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 2, // Limits description to 3 lines
+                                width: 300
+                            }}>
+                                {task.description}
+                            </Typography>
+                            <Typography variant="body2">
+                                <b>Due: {task.duedate.toLocaleString('en-US', {
+                                    weekday: 'long',
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                })}</b>
+                            </Typography>
+                        </Box>
+
+                        {/* Bets profile pictures */}
+                        <Box sx={{ display: 'flex', marginLeft: 2 }}>
+                            {task.bets && task.bets.slice(0, 3).map((bet, betIndex) => (
+                                <Box
+                                    key={betIndex}
+                                    sx={{
+                                        position: 'relative',
+                                        marginRight: 1,
+                                    }}
+                                >
+                                    <Tooltip title={bet.username} arrow placement="top">
+                                        <img
+                                            src={`https://ui-avatars.com/api/?name=${bet.username}`}
+                                            alt={bet.username}
+                                            style={{
+                                                width: 30,
+                                                height: 30,
+                                                borderRadius: '50%',
+                                                cursor: 'pointer',
+                                            }}
+                                        />
+                                    </Tooltip>
+                                </Box>
+                            ))}
+                        </Box>
+
+
+                        {/* Delete button */}
+                        <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteTask(index)}>
+                            <DeleteIcon />
+                        </IconButton>
                     </ListItem>
                 ))}
             </List>

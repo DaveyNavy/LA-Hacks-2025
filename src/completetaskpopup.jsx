@@ -54,17 +54,17 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
             <Box
                 sx={{
                     position: 'absolute',
+                    width: 500,
+                    bgcolor: 'background.default',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 4,
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                    borderRadius: 2,
                 }}
             >
-                <Typography variant="h3">Complete Task</Typography>
+                <Typography variant="h4">Complete Task</Typography>
                 <TextField
                     fullWidth
                     label="Task Description"
@@ -75,6 +75,10 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                 />
 
                 {/* Embedded Form */}
+                <br></br>
+                <br></br>
+                <Typography variant="body1">Upload a file to prove the completion of your task:</Typography>
+                <br></br>
                 <form
                     action="http://localhost:3000/api/uploads"
                     encType="multipart/form-data"
@@ -89,6 +93,7 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
                         />
                         <input type="number" name="id" hidden value={taskid || 4} readOnly={true} />
                     </div>
+                    <br></br>
                     {/* <button type="submit">Upload</button> */}
                     <Button variant="contained" onClick={handleSubmit}>
                         Complete Task
