@@ -79,7 +79,7 @@ const Tab1 = () => {
                         style={{ transition: 'background-color 0.3s' }}
                     >
                         {/* Left column - Takes 4/5ths of the width */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '75%', marginRight: 5 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '70%', marginRight: 3 }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <Typography variant="h6"><b><u>{task.username}</u></b></Typography>
                                 <Typography variant="body2" sx={{ textAlign: 'right' }}>
@@ -99,7 +99,7 @@ const Tab1 = () => {
                                     marginTop: 1,
                                     overflow: 'hidden',       // Hides overflowed content
                                     textOverflow: 'ellipsis', // Adds "..." at the end of truncated text
-                                    width: 400
+                                    width: 500
                                 }}
                             >
                                 {task.description}
@@ -107,14 +107,14 @@ const Tab1 = () => {
 
                         </Box>
                         {/* Right column - Takes 1/5th of the width */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '20%', alignItems: 'flex-end', borderLeft: '1px solid', paddingLeft: 3 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%', alignItems: 'flex-end', borderLeft: '1px solid', paddingLeft: 3, paddingRight: 1, alignContent:'center' }}>
                             <Typography variant="body2">
                                 Number of Bets: {task.bets ? task.bets.length : 0}
                             </Typography>
                             <Button
                                 variant="contained"
                                 onClick={() => handleBetTask(index)}
-                                sx={{ marginTop: 1 }}
+                                sx={{ marginTop: 1, width: '100%'}}
                             >
                                 Bet Now
                             </Button>
