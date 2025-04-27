@@ -20,9 +20,33 @@ import '@fontsource/poppins'; // Defaults to weight 400
 import coin from "../public/betcoin.png";
 
 
+const refreshUserInfo = async () => {
+    const response = await fetch(`${host_url}/api/users/${Globaler.username}/info`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        console.log(data[0].currency);
+        Globaler.setCurrency(parseInt(data[0].currency, 10)); // Update currency as integer
+        localStorage.setItem("currency", data[0].currency); // Persist in localStorage
+    } else {
+        console.error("Failed to refresh user info");
+    }
+}
+
+
 function App() {
     const { toggleColorMode } = useColorMode(); 
     const theme = useTheme(); 
+
+    const [currency, setCurrency] = useState(Globaler.currency);
+    Globaler.setCurrency = setCurrency; // Set the currency state in Globaler
 
     // Login routing:
     const navigate = useNavigate();
@@ -32,6 +56,9 @@ function App() {
     React.useEffect(() => {
         if (!Globaler.isLoggedIn) {
             goToLogin();
+        }
+        else {
+            refreshUserInfo();
         }
     }, []);
     const handleLogout = () => {
@@ -75,7 +102,7 @@ function App() {
                           style={{ width: 30, height: 30 }}
                       />
                      <Typography variant="h6" sx={{ mr: 4, ml: 2 }}>
-                          {Globaler.currency}
+                            {currency}
                       </Typography>
                       <IconButton onClick={toggleColorMode} color="inherit">
                           {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
