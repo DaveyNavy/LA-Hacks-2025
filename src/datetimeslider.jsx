@@ -6,7 +6,7 @@ import { format, parseISO, addSeconds, differenceInSeconds } from 'date-fns';
 import { Globaler, host_url } from './global.jsx';
 
 
-const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
+const DateTimeSlider = ({ shouldDisable, futureDate, setDueDate, username }) => {
     // Convert futureDate to Date object if it's a string
     const endDate = typeof futureDate === 'string' ? parseISO(futureDate) : new Date(futureDate);
     const now = new Date();
@@ -16,8 +16,9 @@ const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
 
 
     React.useEffect(() => {
-        setDueDate(futureDate);
-        setTextFieldValue(format(futureDate, 'yyyy-MM-dd HH:mm'));
+        setDueDate(new Date());
+        setTextFieldValue(format(new Date(), 'yyyy-MM-dd HH:mm'));
+        // setTextFieldValue(format(futureDate, 'yyyy-MM-dd HH:mm'));
     }, [futureDate]);
 
     // State for the current selected value (in seconds from now)
@@ -89,11 +90,12 @@ const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
                 value={value}
                 onChange={handleSliderChange}
                 min={0}
-                max={totalSeconds}
-                step={60 * 15} // 15-minute steps
+                max={totalSeconds + 1}
+                step={60} // 15-minute steps
                 marks={generateMarks()}
                 // valueLabelDisplay="auto"
                 // valueLabelFormat={formatValueText}
+                disabled={shouldDisable}
             />
 
             <TextField
@@ -110,6 +112,7 @@ const DateTimeSlider = ({ futureDate, setDueDate, username }) => {
                 }}
                 fullWidth
                 margin="normal"
+                disabled={shouldDisable}
             />
 
             {/* <div style={{ marginTop: '20px' }}>

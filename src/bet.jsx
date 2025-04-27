@@ -41,6 +41,8 @@ const Tab1 = () => {
     }, []);
 
     const handleBetTask = (index) => {
+        const bets = tasks[index].bets || [];
+        bets.sort((a, b) => a.date - b.date).reverse();
         setSelectedTask(tasks[index]);
         setOpenPopup(true);
     };

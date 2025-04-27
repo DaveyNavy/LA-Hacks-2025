@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ClearIcon } from '@mui/x-date-pickers';
 import AddTaskPopup from './addtaskpopup';
 import { Globaler, host_url } from './global.jsx';
+import { set } from 'date-fns';
+import CompleteTaskPopup from './completetaskpopup.jsx';
 
 
 const Tasks = () => {
@@ -14,7 +17,31 @@ const Tasks = () => {
     const [taskDesc, setTaskDesc] = useState('');
 
     // Popup state
-    const [openPopup, setOpenPopup] = useState(false);
+    const [openPopup_add, setOpenPopup_add] = useState(false);
+    const [openPopup_complete, setOpenPopup_complete] = useState(false);
+    const [taskToComplete, setTaskToComplete] = useState(null);
+
+    // EAT IT:
+    const getDisabled = (index) => {
+        const task = tasks[index];
+        return task.iscomplete;
+    }
+    const getChecked = (index) => {
+        const task = tasks[index];
+        return task.iscomplete;
+    }
+    const handleCheckboxClick = (index) => {
+        const task = tasks[index];
+        console.log(task);
+        setTaskToComplete(task);
+        setOpenPopup_complete(true);
+    }
+    const handleCompleteTask = async (taskid) => {
+        const taskToComplete = tasks.find(task => task.taskid === taskid);
+        taskToComplete.iscomplete = true;
+        setTasks([...tasks]);
+        return;
+    }
 
 
     // Fetch tasks from the server when the component mounts
@@ -42,7 +69,7 @@ const Tasks = () => {
     }, []);
 
     const handleAddTask = () => {
-        setOpenPopup(true);
+        setOpenPopup_add(true);
     };
 
     const handleDeleteTask = async (index) => {
@@ -89,15 +116,31 @@ const Tasks = () => {
                     <ListItem
                         key={index}
                         button="true"
-                        onClick={() => alert(`Task clicked: ${task.description}`)}
+                        // onClick={() => alert(`Task clicked: ${task.description}`)}
                         style={{ transition: 'background-color 0.3s' }}
+                        // secondaryAction={
+                        //     <IconButton edge="end" aria-label="delete" onClick={(e) => {
+                        //         handleDeleteTask(index);
+                        //         e.stopPropagation();
+                        //     }}>
+                        //         <DeleteIcon />
+                        //     </IconButton>
+                        // }
                         secondaryAction={
-                            <IconButton edge="end" aria-label="delete" onClick={(e) => {
-                                handleDeleteTask(index);
-                                e.stopPropagation();
-                            }}>
-                                <DeleteIcon />
-                            </IconButton>
+                            <>
+                                <IconButton edge="end" aria-label="complete" onClick={(e) => {
+                                    // Handle checkbox click logic here
+                                    e.stopPropagation();
+                                }}>
+                                    <Checkbox onClick={() => { handleCheckboxClick(index) }} disabled={getDisabled(index)} checked={getChecked(index)} />
+                                </IconButton>
+                                <IconButton edge="end" aria-label="delete" onClick={(e) => {
+                                    handleDeleteTask(index);
+                                    e.stopPropagation();
+                                }}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </>
                         }
                     >
                         <ListItemText primary={task.description} />
@@ -115,11 +158,11 @@ const Tasks = () => {
                 ))}
             </List>
             <AddTaskPopup
-                open={openPopup}
+                open={openPopup_add}
                 taskDesc={taskDesc}
                 onClose={() => {
                     setTaskDesc('');
-                    setOpenPopup(false);
+                    setOpenPopup_add(false);
                 }}
                 onSubmit={async (newtask) => {
                     const data = await fetch(`${host_url}/api/tasks`, {
@@ -143,9 +186,18 @@ const Tasks = () => {
                         const taskID = await data.json();
                         setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID }]);
                         setTaskDesc('');
-                        setOpenPopup(false);
+                        setOpenPopup_add(false);
                     }
                 }}  
+            />
+            <CompleteTaskPopup
+                open={openPopup_complete}
+                taskToComplete={taskToComplete}
+                onClose={() => {
+                    setTaskToComplete(null);
+                    setOpenPopup_complete(false);
+                }}
+                onSubmit={handleCompleteTask}
             />
         </Container>
     );

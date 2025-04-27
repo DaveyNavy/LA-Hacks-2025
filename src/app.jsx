@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   AppBar, 
   Toolbar, 
@@ -17,27 +17,28 @@ import { useNavigate } from 'react-router-dom';
 import { useColorMode } from './theme.jsx'; 
 import '@fontsource/poppins'; // Defaults to weight 400
 
+import coin from "../public/betcoin.png";
+
 
 function App() {
     const { toggleColorMode } = useColorMode(); 
     const theme = useTheme(); 
 
+    // Login routing:
     const navigate = useNavigate();
     const goToLogin = () => {
         navigate('/login');
     };
-
-    useEffect(() => {
+    React.useEffect(() => {
         if (!Globaler.isLoggedIn) {
             goToLogin();
         }
     }, []);
-
     const handleLogout = () => {
         Globaler.logout();
         goToLogin();
     };
-
+    // Profile routing:
     const handleProfileClick = () => {
         console.log('Profile clicked');
     };
