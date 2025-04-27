@@ -104,13 +104,14 @@ function HomePage() {
             <Box
                 id="how-it-works"
                 sx={{
-                    minHeight: '100vh',
+                    minHeight: '80vh',
                     backgroundColor: 'white',
                     color: 'black',
                     pt: 12,
                     px: 2,
                     textAlign: 'left',
                     overflowX: 'hidden',
+                    
                 }}
             >
                 <Container maxWidth="md">
