@@ -34,7 +34,7 @@ function App() {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton onClick={handleProfileClick} sx={{ p: 0 }}>
                             <img
-                                src='https://via.placeholder.com/40'
+                                src={`https://ui-avatars.com/api/?name=${Globaler.username}`}
                                 alt="Profile"
                                 style={{ width: 40, height: 40, borderRadius: '50%' }}
                             />

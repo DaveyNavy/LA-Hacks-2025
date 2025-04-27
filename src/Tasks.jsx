@@ -4,7 +4,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddTaskPopup from './addtaskpopup';
 
 const Tasks = () => {
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks2] = useState([]);
+    const setTasks = (newTasks) => {
+        const sortedTasks = newTasks.sort((a, b) => a.duedate - b.duedate);
+        setTasks2(sortedTasks);
+    };
     const [taskDesc, setTaskDesc] = useState('');
 
     // Popup state
@@ -41,7 +45,7 @@ const Tasks = () => {
 
     const handleDeleteTask = async (index) => {
         const taskToDelete = tasks[index];
-        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.id}`, {
+        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.taskid}`, {
             method: "DELETE",
             headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -82,14 +86,29 @@ const Tasks = () => {
                 {tasks.map((task, index) => (
                     <ListItem
                         key={index}
+                        button
+                        onClick={() => alert(`Task clicked: ${task.description}`)}
+                        style={{ transition: 'background-color 0.3s' }}
                         secondaryAction={
-                            <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteTask(index)}>
+                            <IconButton edge="end" aria-label="delete" onClick={(e) => {
+                                handleDeleteTask(index);
+                                e.stopPropagation();
+                            }}>
                                 <DeleteIcon />
                             </IconButton>
                         }
                     >
                         <ListItemText primary={task.description} />
-                        <ListItemText primary={task.duedate.toLocaleDateString()} />
+                        <ListItemText primary={task.duedate.toLocaleString('en-US', {
+                            weekday: 'long',
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                        })} />
+                        {task.bets && task.bets.map((bet, betIndex) => (
+                            <ListItemText key={betIndex} primary={`User: ${bet.username}`} />
+                        ))}
                     </ListItem>
                 ))}
             </List>
@@ -101,7 +120,6 @@ const Tasks = () => {
                     setOpenPopup(false);
                 }}
                 onSubmit={async (newtask) => {
-                    const formattedDate = newtask.dueDate.toISOString().split('T')[0]; // Convert to "YYYY-MM-DD" format
                     const data = await fetch("http://localhost:3000/api/tasks", {
                         method: "POST",
                         headers: {
@@ -109,15 +127,19 @@ const Tasks = () => {
                             "Authorization": `Bearer ${localStorage.getItem("token")}`,
                         },
                         mode: "cors",
-                        body: JSON.stringify({ desc: newtask.taskDescription, date: formattedDate }),
+                        body: JSON.stringify({ desc: newtask.taskDescription, date: newtask.dueDate }),
                     });
+
+                    const currentCounter = parseInt(localStorage.getItem("counter") || "0", 10);
+                    localStorage.setItem("counter", currentCounter + 1);
+
                     if (!data.ok) {
                         // Handle the error if the response is not OK
                         alert("Error adding task");
                     }
                     else {
                         const taskID = await data.json();
-                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), id: taskID }]);
+                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID }]);
                         setTaskDesc('');
                         setOpenPopup(false);
                     }
