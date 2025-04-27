@@ -24,7 +24,7 @@ await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
 
 await sql.query(`CREATE TABLE IF NOT EXISTS bets (
     id SERIAL PRIMARY KEY,
-    taskId INTEGER REFERENCES tasks(id),
+    taskId INTEGER REFERENCES tasks(id) ON DELETE CASCADE,
     username VARCHAR(255) REFERENCES users(username),
     date VARCHAR(255)
 );`);
