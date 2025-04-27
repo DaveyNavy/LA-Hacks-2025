@@ -42,8 +42,7 @@ const Tab2 = () => {
         const data = await fetchData(
           "http://localhost:3000/api/friends/requests"
         );
-        const incomingRequests = data.map((request) => request.requester);
-        setIncomingRequests(incomingRequests); // Assuming the response is an array of incoming requests
+        setIncomingRequests(data.map((request) => request.requester)); 
       } catch (error) {
         console.error("Failed to fetch incoming requests", error);
       }
@@ -99,9 +98,8 @@ const Tab2 = () => {
         mode: "cors",
         body: JSON.stringify({ response: "accept" }),
       });
-      setIncomingRequests((prev) =>
-        prev.filter((user) => user.username !== username)
-      );
+      // Remove the accepted request from the list
+      setIncomingRequests((prev) => prev.filter((user) => user !== username));
     } catch (error) {
       console.error("Failed to add friend", error);
     }
@@ -118,9 +116,8 @@ const Tab2 = () => {
         mode: "cors",
         body: JSON.stringify({ response: "reject" }),
       });
-      setIncomingRequests((prev) =>
-        prev.filter((user) => user.username !== username)
-      );
+      // Remove the rejected request from the list
+      setIncomingRequests((prev) => prev.filter((user) => user !== username));
     } catch (error) {
       console.error("Failed to reject request", error);
     }
@@ -234,24 +231,24 @@ const Tab2 = () => {
         </Typography>
 
         <List>
-          {incomingRequests.map((user, index) => (
+          {incomingRequests.map((username, index) => (
             <ListItem key={index}>
               <ListItemAvatar>
-                <Avatar src={user.profilePic} alt={user.username} />
+                <Avatar alt={username} />
               </ListItemAvatar>
-              <ListItemText primary={user} />
+              <ListItemText primary={username} />
               <Box sx={{ display: "flex", gap: 1 }}>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleAddBack(user)}
+                  onClick={() => handleAddBack(username)}
                 >
                   Add Back
                 </Button>
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => handleRejectRequest(user)}
+                  onClick={() => handleRejectRequest(username)}
                 >
                   Reject
                 </Button>
