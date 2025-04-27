@@ -12,8 +12,8 @@ friendsRouter.get("/", verifyToken, friendsPageGet);
 
 friendsRouter.get("/tasks", verifyToken, friendsTasksPageGet);
 
-friendsRouter.get('/requests', verifyToken, friendRequestsPageGet);
+friendsRouter.get("/requests", verifyToken, friendRequestsPageGet);
 
-friendsRouter.get('/requests/:username', verifyToken, friendRequestPost);
+friendsRouter.post("/requests/:username", verifyToken, friendRequestPost);
 
 export default friendsRouter;
