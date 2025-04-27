@@ -123,11 +123,12 @@ const DateTimeSlider = ({ shouldDisable, futureDate, setDueDate, username }) => 
                     Log Selected Date
                 </Button>
             </div> */}
-
+{/* 
             <div style={{ marginTop: '10px', color: '#666' }}>
-                {/* You bet that {username} will complete their task at: {format(currentDate, 'PPPPpppp')} */}
+                 You bet that {username} will complete their task at: {format(currentDate, 'PPPPpppp')} 
                 You bet that {username} will complete their task as close to this date as possible.
             </div>
+             */}
         </div>
     );
 };

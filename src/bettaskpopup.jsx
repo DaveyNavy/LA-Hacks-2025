@@ -3,7 +3,7 @@ import { Modal, Box, TextField, Button } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
-import { Typography } from '@mui/material';
+import { Typography,Divider } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import DateTimeSlider from './datetimeslider';
 import { Globaler, host_url } from './global.jsx';
@@ -70,8 +70,8 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                         top: '50%',
                         left: '40%',
                         transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
+                        width: 500,
+                        bgcolor: 'background.default',
                         boxShadow: 24,
                         p: 4,
                         borderRadius: 2,
@@ -85,10 +85,24 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                         margin="normal"
                         value={description}
                         contentEditable={false}
-                    />
-                    <Typography variant="h6">Due in {getRelativeDate(duedate)}</Typography>
-                    <Typography variant="body1">
-                        Due Date: {duedate ? new Date(duedate).toLocaleString('en-US', {
+                        multiline
+                        rows={3}
+                        sx={{
+                            '& .MuiInputLabel-root': {
+                            // Ensure the label has enough space and doesn't get cut off
+                            marginTop: '-2px',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                            maxHeight: 200,
+                            overflowY: 'auto',
+                            }
+                        }}
+                        />
+                    <br></br>
+                    <br></br>
+
+                    <Typography variant="h8">
+                        <b>Due Date:</b> {duedate ? new Date(duedate).toLocaleString('en-US', {
                             weekday: 'long',
                             month: 'numeric',
                             day: 'numeric',
@@ -97,6 +111,14 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                             hour12: true,
                         }) : 'No due date set'}
                     </Typography>
+                    <br></br>
+                    <Typography variant="h8">Due {getRelativeDate(duedate)}</Typography>
+                    <br></br>
+                    <br></br>
+
+                    <Typography variant="h8">
+                        Select when you think <b>{username}</b> will complete their task:
+                    </Typography>
 
                     <DateTimeSlider shouldDisable={hasAlreadyBet} futureDate={duedate} setDueDate={setDueDate} username={username} />
 
@@ -104,7 +126,6 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                         fullWidth
                         label="Bet Amount"
                         variant="outlined"
-                        margin="normal"
                         value={betAmount}
                         onChange={handleBetAmountChange}
                         type="number"
@@ -129,21 +150,23 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                         left: '80%',
                         transform: 'translate(-50%, -50%)',
                         width: 300,
-                        bgcolor: 'background.paper',
+                        bgcolor: 'primary.main',
                         boxShadow: 24,
                         p: 4,
                         borderRadius: 2,
                     }}
                 >
-                    <Typography variant="h4">Current Bets</Typography>
+                    <Typography variant="h4" sx={{padding: 1}}>Current Bets</Typography>
+                    <br></br>
                     {getSortedBets().map((bet, index) => (
                         <Box
                             key={index}
                             sx={{
-                                mb: 2,
-                                bgcolor: bet.username === Globaler.username ? 'yellow' : 'inherit',
-                                p: 1,
-                                borderRadius: 1,
+                                padding: 2,
+                                marginBottom: 2,
+                                bgcolor: bet.username === Globaler.username ? 'background.default2' : 'inherit',
+                                border: (theme) => `2px solid ${theme.palette.background.default2}`,
+                                borderRadius: '4px',
                             }}
                         >
                             <Typography variant="h6">{bet.username}</Typography>
@@ -159,6 +182,7 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                             </Typography>
                         </Box>
                     ))}
+                    <br></br>
                     <Typography variant="h6">Total bets: {getSortedBets().length}</Typography>
                 </Box>
             </Box>

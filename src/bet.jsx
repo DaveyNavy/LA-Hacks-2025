@@ -99,7 +99,7 @@ const Tab1 = () => {
                                     marginTop: 1,
                                     overflow: 'hidden',       // Hides overflowed content
                                     textOverflow: 'ellipsis', // Adds "..." at the end of truncated text
-                                    width: 500
+                                    width: 450
                                 }}
                             >
                                 {task.description}
