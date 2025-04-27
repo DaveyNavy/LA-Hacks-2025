@@ -5,7 +5,8 @@ const sql = neon(process.env.DATABASE_URL);
 await sql.query(`CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) PRIMARY KEY,
     password VARCHAR(255),
-    currency INTEGER
+    currency INTEGER,
+    numOfTasksCompleted INTEGER DEFAULT 0
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS friends (
@@ -19,7 +20,9 @@ await sql.query(`CREATE TABLE IF NOT EXISTS tasks (
     description TEXT,
     dueDate VARCHAR(255),
     isComplete BOOLEAN DEFAULT FALSE,
-    betAmount INTEGER DEFAULT NULL
+    betAmount INTEGER DEFAULT NULL,
+    dateCreated VARCHAR(255),
+    dateCompleted VARCHAR(255)
 );`);
 
 await sql.query(`CREATE TABLE IF NOT EXISTS bets (
