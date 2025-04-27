@@ -15,7 +15,7 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
     const handleSubmit = async () => {
         if (isSubmitting) return; // Prevent multiple submissions
         isSubmitting = true;
-        // await onSubmit({ taskDescription, dueDate });
+        await onSubmit({ betAmount, dueDate });
         onClose();
         isSubmitting = false;
     };
@@ -26,7 +26,13 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
         return distance;
     }
 
-    
+    const [betAmount, setBetAmount] = useState(betamount || 0);
+    const handleBetAmountChange = (event) => {
+        setBetAmount(event.target.value);
+    };
+
+    const [dueDate, setDueDate] = useState(duedate || null);
+
 
     // RETURNS:
 
@@ -59,7 +65,18 @@ const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {
                 />
                 <Typography variant="h6">Due in {getRelativeDate(duedate)}</Typography>
 
-                <DateTimeSlider futureDate={duedate} />
+                <DateTimeSlider futureDate={duedate} setDueDate={setDueDate} />
+
+                <TextField
+                    fullWidth
+                    label="Bet Amount"
+                    variant="outlined"
+                    margin="normal"
+                    value={betAmount}
+                    onChange={handleBetAmountChange}
+                    type="number"
+                    inputProps={{ min: 0, step: 1 }}
+                />
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button onClick={onClose} sx={{ mr: 1 }}>

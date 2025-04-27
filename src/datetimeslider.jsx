@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { format, parseISO, addSeconds, differenceInSeconds } from 'date-fns';
 
-const DateTimeSlider = ({ futureDate }) => {
+const DateTimeSlider = ({ futureDate, setDueDate }) => {
     // Convert futureDate to Date object if it's a string
     const endDate = typeof futureDate === 'string' ? parseISO(futureDate) : new Date(futureDate);
     const now = new Date();
@@ -13,7 +13,12 @@ const DateTimeSlider = ({ futureDate }) => {
     const totalSeconds = differenceInSeconds(endDate, now);
 
     // State for the current selected value (in seconds from now)
-    const [value, setValue] = useState(0);
+    const [value, setValue2] = useState(0);
+    const setValue = (newValue) => {
+        setValue2(newValue);
+        const newDate = addSeconds(now, newValue);
+        setDueDate(newDate);
+    }
     const [textFieldValue, setTextFieldValue] = useState(format(now, 'yyyy-MM-dd HH:mm'));
 
     // Calculate the current date based on slider value
