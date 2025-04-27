@@ -56,7 +56,7 @@ app.post(
       console.log(req.file.path + " was deleted");
     });
 
-    if (result == "yes") {
+    if (result.trim() == "yes") {
       req.params.taskId = req.body.id;
       await tasksCompletePost(req, res);
     } else {
