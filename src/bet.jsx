@@ -153,7 +153,7 @@ const Tab1 = () => {
                     else {
                         const result = await data.json();
                         console.log(result);
-                        setTaskDesc('');
+                        setSelectedTask(null);
                         setOpenPopup(false);
                     }
                 }}

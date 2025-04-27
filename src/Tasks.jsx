@@ -184,7 +184,7 @@ const Tasks = () => {
                     }
                     else {
                         const taskID = await data.json();
-                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID }]);
+                        setTasks([...tasks, { description: newtask.taskDescription, duedate: new Date(newtask.dueDate), taskid: taskID, iscomplete: false }]);
                         setTaskDesc('');
                         setOpenPopup_add(false);
                     }

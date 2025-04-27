@@ -21,7 +21,7 @@ export async function checkTaskComplete(task, file, type) {
       "\n\n",
       "You are given the following goal: " +
         task +
-        "Determine if the submitted file represents proof that the goal was completed. Answer only yes or no.",
+        ". \n \n Determine if the submitted file seems to correspond to completion of the goal. When in doubt, answer \"yes\". Answer only \"yes\" or \"no\".",
     ]),
   });
   return result.text;
