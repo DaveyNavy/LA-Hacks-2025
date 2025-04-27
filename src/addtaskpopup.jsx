@@ -71,7 +71,8 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
                     transform: 'translate(-50%, -50%)',
                 }}
             >
-                <Typography variant="h5">Add New Task</Typography>                <TextField
+                <Typography variant="h5">Add New Task</Typography>                
+                <TextField
                     fullWidth
                     label="Task Description"
                     variant="outlined"

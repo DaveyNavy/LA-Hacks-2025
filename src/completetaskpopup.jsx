@@ -37,7 +37,6 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
       if (!response.ok) {
         alert("Error uploading file: " + json.message);
       } else {
-        // alert("File uploaded successfully");
         console.log("File uploaded successfully");
         onSubmit(taskid); // Call the onSubmit function with the task ID
         onClose(); // Close the popup after submission

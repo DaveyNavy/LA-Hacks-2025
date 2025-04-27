@@ -62,7 +62,7 @@ const Tab2 = () => {
           `${host_url}/api/users/${searchTerm}/info`
         );
         const username = user.username;
-        setAllUsers(data.filter((user) => user.username !== username)); // Assuming the response is an array of users
+        setAllUsers(data.filter((user) => user.username !== username)); 
       } catch (error) {
         console.error("Failed to search users", error);
       }
@@ -74,7 +74,7 @@ const Tab2 = () => {
     const fetchOutgoingRequests = async () => {
       try {
         const data = await fetchData(`${host_url}/api/friends/outgoing`);
-        setOutgoingRequests(data); // Assuming the response is an array of users
+        setOutgoingRequests(data);
       } catch (error) {
         console.error("Failed to search outgoing requests", error);
       }
@@ -86,7 +86,7 @@ const Tab2 = () => {
     const fetchFriends = async () => {
       try {
         const data = await fetchData(`${host_url}/api/friends`);
-        setAllFriends(data); // Assuming the response is an array of users
+        setAllFriends(data); 
       } catch (error) {
         console.error("Failed to fetch friends", error);
       }
@@ -248,7 +248,7 @@ const Tab2 = () => {
         <Box
           sx={{
             marginTop: 2,
-            height: "calc(100% - 100px)", // adjust to leave space for search bar
+            height: "calc(100% - 100px)", 
             overflowY: "auto",
           }}
         >

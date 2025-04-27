@@ -15,7 +15,7 @@ import TabSelector from "./TabSelector.jsx";
 import { Globaler, host_url } from "./global.jsx";
 import { useNavigate } from "react-router-dom";
 import { useColorMode } from "./theme.jsx";
-import "@fontsource/poppins"; // Defaults to weight 400
+import "@fontsource/poppins"; 
 
 import coin from "/betcoin.png";
 

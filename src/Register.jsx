@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useColorMode } from "./theme.jsx"; // you already have this file
+import { useColorMode } from "./theme.jsx"; 
 
 
 async function tryRegister(user, pass) {

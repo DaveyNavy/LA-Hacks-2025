@@ -73,12 +73,10 @@ const DateTimeSlider = ({ shouldDisable, futureDate, setDueDate, username }) => 
         }
     };
 
-    // Format value for the slider tooltip
     const formatValueText = (value) => {
         return format(addSeconds(now, value), 'PPpp');
     };
 
-    // Handle button click
     const handleButtonClick = () => {
         console.log("Selected date:", currentDate);
         console.log("Formatted:", format(currentDate, 'yyyy-MM-dd HH:mm:ss'));
@@ -114,21 +112,6 @@ const DateTimeSlider = ({ shouldDisable, futureDate, setDueDate, username }) => 
                 margin="normal"
                 disabled={shouldDisable}
             />
-
-            {/* <div style={{ marginTop: '20px' }}>
-                <Button
-                    variant="contained"
-                    onClick={handleButtonClick}
-                >
-                    Log Selected Date
-                </Button>
-            </div> */}
-{/* 
-            <div style={{ marginTop: '10px', color: '#666' }}>
-                 You bet that {username} will complete their task at: {format(currentDate, 'PPPPpppp')} 
-                You bet that {username} will complete their task as close to this date as possible.
-            </div>
-             */}
         </div>
     );
 };
