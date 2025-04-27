@@ -119,8 +119,6 @@ const tasksCompletePost = async (req, res) => {
     }
   }
 
-  console.log(minBet);
-
   let minBets = [];
   for (let i = 0; i < betUsers.length; i++) {
     const betDate = new Date(betDates[i]);
@@ -129,7 +127,7 @@ const tasksCompletePost = async (req, res) => {
       minBets.push(betUsers[i]);
     }
   }
-  
+
   const winnerAmount = (betUsers.length *  betAmount) / minBets.length;
 
   for (let i = 0; i < minBets.length; i++) {

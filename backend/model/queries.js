@@ -159,6 +159,11 @@ async function completeTask(username, taskId) {
     "UPDATE users SET numOfTasksCompleted = numOfTasksCompleted + 1 WHERE username = $1",
     [username]
   );
+  await sql.query(
+    "DELETE FROM bets WHERE taskId = $1",
+    [taskId]
+  );
+  deleteTask(username, taskId);
 }
 
 async function getTaskDescription(taskId) {
