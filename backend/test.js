@@ -1,3 +1,5 @@
+import { Globaler } from "../src/global";
+
 async function getToken() {
   const data = await fetch("http://localhost:3000/api/users/login", {
     method: "POST",
@@ -26,3 +28,23 @@ async function getData() {
 }
 
 await getData();
+
+import { Globaler } from "./global.jsx";
+async function refreshUserInfo() {
+  const response = await fetch(`${host_url}/api/users/${Globaler.username}/info`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.jwt}`,
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    this.currency = data.currency; // Update currency
+    localStorage.setItem("currency", data.currency); // Persist in localStorage
+  } else {
+    console.error("Failed to refresh user info");
+  }
+}
+

@@ -223,6 +223,11 @@ async function getUsernameFromTaskId(taskId) {
   return result[0].username;
 }
 
+async function getAllUsers() {
+  const result = await sql.query("SELECT * FROM users");
+  return result;
+}
+
 export {
   findUser,
   createUser,
@@ -245,4 +250,5 @@ export {
   getBets,
   updateUserCurrency,
   getUsernameFromTaskId,
+  getAllUsers
 };
