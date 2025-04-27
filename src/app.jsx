@@ -69,17 +69,17 @@ function App() {
 
                   {/* RIGHT side */}
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <IconButton onClick={toggleColorMode} color="inherit">
-                          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                      </IconButton>
-                      <Typography variant="h6" sx={{ mr: 1, ml: 2 }}>
-                          {Globaler.currency}
-                      </Typography>
-                      <img
-                          src="src/assets/betcoin.png"
+                     <img
+                          src={coin}
                           alt="Currency"
                           style={{ width: 30, height: 30 }}
                       />
+                     <Typography variant="h6" sx={{ mr: 4, ml: 2 }}>
+                          {Globaler.currency}
+                      </Typography>
+                      <IconButton onClick={toggleColorMode} color="inherit">
+                          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                      </IconButton>
                       <Button color="inherit" onClick={handleLogout} sx={{ ml: 2 }}>
                           Logout
                       </Button>
