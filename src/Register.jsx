@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from '@mui/material';
 import { Globaler, host_url } from './global';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useColorMode } from "./theme.jsx"; // you already have this file
+
 
 async function tryRegister(user, pass) {
     const data = await fetch(`${host_url}/api/users/register`, {
@@ -20,6 +26,9 @@ async function tryRegister(user, pass) {
 }
 
 function Register() {
+    const { toggleColorMode } = useColorMode();
+    const theme = useTheme();
+
     const [user, setUsername] = useState('');
     const [pass, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
@@ -55,7 +64,14 @@ function Register() {
                 flexDirection: 'column',
             }}
         >
+            <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+                <IconButton onClick={toggleColorMode} color="inherit">
+                    {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
+                </Box>
+
             <Typography variant="h4" gutterBottom>Register</Typography>
+            <br></br>
             {error && <Typography color="error" sx={{ marginBottom: 2 }}>{error}</Typography>}
             <TextField
                 label="Username"
@@ -80,7 +96,7 @@ function Register() {
                 onChange={(e) => setConfirmPass(e.target.value)}
                 sx={{ marginBottom: 2, width: '300px' }}
             />
-
+<br></br>
             <Button variant="contained" color="primary" onClick={handleLogin}>
                 Continue
             </Button>
