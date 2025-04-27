@@ -37,6 +37,7 @@ const Tab2 = () => {
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
+  const [self, setSelf] = useState({});
 
   // Fetch incoming requests on component mount
   useEffect(() => {
@@ -57,9 +58,11 @@ const Tab2 = () => {
     const fetchUsers = async () => {
       try {
         const data = await fetchData(`${host_url}/api/users/${searchTerm}`);
-        const user = await fetchData(`${host_url}/api/users/${searchTerm}/info`);
+        const user = await fetchData(
+          `${host_url}/api/users/${searchTerm}/info`
+        );
         const username = user.username;
-        setAllUsers(data.filter((user) => user.username !== username));  // Assuming the response is an array of users
+        setAllUsers(data.filter((user) => user.username !== username)); // Assuming the response is an array of users
       } catch (error) {
         console.error("Failed to search users", error);
       }
@@ -89,6 +92,18 @@ const Tab2 = () => {
       }
     };
     fetchFriends();
+  }, []);
+
+  useEffect(() => {
+    const fetchSelf = async () => {
+      try {
+        const data = await fetchData(`${host_url}/api/users/self`);
+        setSelf(data);
+      } catch (error) {
+        console.error("Failed to fetch incoming requests", error);
+      }
+    };
+    fetchSelf();
   }, []);
 
   const handleSearchChange = (event) => {
@@ -149,8 +164,10 @@ const Tab2 = () => {
   };
 
   // Filter users for search
-  const filteredUsers = allUsers.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = allUsers.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      user.username != self.username
   );
 
   return (
@@ -189,15 +206,15 @@ const Tab2 = () => {
                 maxHeight: 200,
                 overflowY: "auto",
                 zIndex: 10,
-                backgroundColor: (theme) => theme.palette.background.default2
+                backgroundColor: (theme) => theme.palette.background.default2,
               }}
             >
               <List>
                 {filteredUsers.map((user, index) => (
-                  <ListItem 
-                  sx={{
-                    padding: 1.5,
-                  }}
+                  <ListItem
+                    sx={{
+                      padding: 1.5,
+                    }}
                     key={index}
                     secondaryAction={
                       <Button
@@ -242,17 +259,18 @@ const Tab2 = () => {
               </Typography>
               <List>
                 {outgoingRequests.map((user, index) => (
-                  <ListItem key={index}
-                  sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: 1.5,
-                            marginBottom: 2,
-                            border: (theme) => `1px solid ${theme.palette.border}`,
-                            borderRadius: '4px',
-                        }}
-                    >
+                  <ListItem
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: 1.5,
+                      marginBottom: 2,
+                      border: (theme) => `1px solid ${theme.palette.border}`,
+                      borderRadius: "4px",
+                    }}
+                  >
                     <ListItemAvatar>
                       <Avatar
                         src={`https://ui-avatars.com/api/?name=${user.username}`}
@@ -280,17 +298,18 @@ const Tab2 = () => {
 
         <List>
           {incomingRequests.map((username, index) => (
-            <ListItem key={index}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: 1.5,
-              marginBottom: 2,
-              border: (theme) => `1px solid ${theme.palette.border}`,
-              borderRadius: '4px',
-          }}
-      >
+            <ListItem
+              key={index}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 1.5,
+                marginBottom: 2,
+                border: (theme) => `1px solid ${theme.palette.border}`,
+                borderRadius: "4px",
+              }}
+            >
               <ListItemAvatar>
                 <Avatar
                   src={`https://ui-avatars.com/api/?name=${username}`}
