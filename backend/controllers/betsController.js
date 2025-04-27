@@ -16,13 +16,14 @@ const betsPagePost = async (req, res)  => {
     const taskId = req.params.taskId;
     const { betAmount, date } = req.body;
 
-    const betStatus = await getTaskBet(username, taskId);
+    const betStatus = await getTaskBet(taskId);
 
     if (!betAmount || !date) {
         return res.status(400).json({ error: "Bet amount and date are required" });
     }
+
     
-    if (betStatus[0].betamount === null) {
+    if (betStatus[0].betamount == null) {
         await placeBet(username, taskId, betAmount, date);
     }
     else {

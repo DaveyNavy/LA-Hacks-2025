@@ -32,9 +32,9 @@ const friendsTasksPageGet = async (req, res) => {
 
   const friends = await getAllFriends(username);
   const friendUsernames = friends.map((friend) => friend.friend);
-  const tasks = await getFriendsTasks(friendUsernames);
+  const result = await getFriendsTasks(friendUsernames);
 
-  res.json(tasks);
+  res.json(result);
 };
 
 const friendRequestsPageGet = async (req, res) => {
