@@ -3,6 +3,8 @@ import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { format, parseISO, addSeconds, differenceInSeconds } from 'date-fns';
+import "dotenv/config";
+
 
 const DateTimeSlider = ({ futureDate, setDueDate }) => {
     // Convert futureDate to Date object if it's a string

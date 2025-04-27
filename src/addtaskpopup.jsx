@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
 import { Typography } from '@mui/material';
 import { format } from 'date-fns';
+import "dotenv/config";
 
 
 const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {

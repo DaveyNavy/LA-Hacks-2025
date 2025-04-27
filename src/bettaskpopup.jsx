@@ -6,6 +6,8 @@ import { TimePicker } from '@mui/x-date-pickers';
 import { Typography } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import DateTimeSlider from './datetimeslider';
+import "dotenv/config";
+
 
 
 const BetTaskPopup = ({ open, onClose, onSubmit, selectedTask }) => {

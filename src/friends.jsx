@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -40,7 +42,7 @@ const Tab2 = () => {
     const fetchIncomingRequests = async () => {
       try {
         const data = await fetchData(
-          "http://localhost:3000/api/friends/requests"
+          `${host_url}/api/friends/requests`
         );
         setIncomingRequests(data.map((request) => request.requester)); 
       } catch (error) {
@@ -56,7 +58,7 @@ const Tab2 = () => {
     const fetchUsers = async () => {
       try {
         const data = await fetchData(
-          `http://localhost:3000/api/users/${searchTerm}`
+          `${host_url}/api/users/${searchTerm}`
         );
         setAllUsers(data); // Assuming the response is an array of users
       } catch (error) {
@@ -72,7 +74,7 @@ const Tab2 = () => {
 
   const handleSendRequest = async (user) => {
     try {
-      await fetch(`http://localhost:3000/api/users/${user.username}/request`, {
+      await fetch(`${host_url}/api/users/${user.username}/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +91,7 @@ const Tab2 = () => {
 
   const handleAddBack = async (username) => {
     try {
-      await fetch(`http://localhost:3000/api/friends/requests/${username}`, {
+      await fetch(`${host_url}/api/friends/requests/${username}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +109,7 @@ const Tab2 = () => {
 
   const handleRejectRequest = async (username) => {
     try {
-      await fetch(`http://localhost:3000/api/friends/requests/${username}`, {
+      await fetch(`${host_url}/api/friends/requests/${username}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

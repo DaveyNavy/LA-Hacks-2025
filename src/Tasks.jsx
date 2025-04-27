@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddTaskPopup from './addtaskpopup';
+import "dotenv/config";
+
 
 const Tasks = () => {
     const [tasks, setTasks2] = useState([]);
@@ -18,7 +20,7 @@ const Tasks = () => {
     // Fetch tasks from the server when the component mounts
     React.useEffect(() => {
         const fetchTasks = async () => {
-            const data = await fetch("http://localhost:3000/api/tasks", {
+            const data = await fetch(`${host_url}/api/tasks`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -45,7 +47,7 @@ const Tasks = () => {
 
     const handleDeleteTask = async (index) => {
         const taskToDelete = tasks[index];
-        const data = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.taskid}`, {
+        const data = await fetch(`${host_url}api/tasks/${taskToDelete.taskid}`, {
             method: "DELETE",
             headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -120,7 +122,7 @@ const Tasks = () => {
                     setOpenPopup(false);
                 }}
                 onSubmit={async (newtask) => {
-                    const data = await fetch("http://localhost:3000/api/tasks", {
+                    const data = await fetch(`${host_url}/api/tasks`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

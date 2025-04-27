@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Avatar, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import "dotenv/config";
 
 // Mapping backend fields to friendly names
 const FIELD_MAPPING = {
@@ -15,7 +16,7 @@ const Tab3 = () => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const response = await fetch("http://localhost:3000/api/friends", {
+                const response = await fetch(`${host_url}/api/friends`, {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                     },

@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, AppBar, Toolbar, Container, Stack, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useNavigate } from 'react-router-dom';
+import './home.css';
+import "dotenv/config";
 
 function HomePage() {
+    
+    const TypewriterEffect = ({ text, speed}) => {
+        const [displayedText, setDisplayedText] = useState('');
+        const [index, setIndex] = useState(0);
+    
+        useEffect(() => {
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    setDisplayedText(displayedText + text[index]); 
+                    setIndex(index + 1);
+                }
+            }, speed);
+    
+            return () => clearInterval(interval);
+        }, [index, text, speed, displayedText]);
+    
+        return <span className="typewriter-text">{displayedText}</span>;
+    };
     
     const navigate = useNavigate();
 
@@ -70,13 +90,14 @@ function HomePage() {
                     <Stack spacing={4} alignItems="center">
                         <Typography
                             variant="h2"
+                            className="Home"
                             sx={{
                                 fontWeight: 900,
                                 fontSize: { xs: '2.5rem', md: '4rem' },
                                 lineHeight: 1.2,
                             }}
                         >
-                            Bet on your Future with <span style={{ fontStyle: 'italic', textDecoration: 'underline' }}>BeBetter</span>
+                            <TypewriterEffect text="Bet On Your Future With BeBetter" speed={100}/>
                         </Typography>
 
                         <Typography variant="h6">

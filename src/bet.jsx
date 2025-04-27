@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import BetTaskPopup from './bettaskpopup';
+import "dotenv/config";
+
 
 const Tab1 = () => {
     const [tasks, setTasks2] = useState([]);
@@ -17,7 +19,7 @@ const Tab1 = () => {
     // Fetch tasks from the server when the component mounts
     React.useEffect(() => {
         const fetchTasks = async () => {
-            const data = await fetch("http://localhost:3000/api/friends/tasks", {
+            const data = await fetch(`${host_url}/api/friends/tasks`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -77,7 +79,7 @@ const Tab1 = () => {
                     setOpenPopup(false);
                 }}
                 onSubmit={async (betAmount, dueDate, taskid) => {
-                    const data = await fetch(`http://localhost:3000/api/bets/${taskid}`, {
+                    const data = await fetch(`${host_url}/api/bets/${taskid}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

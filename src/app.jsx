@@ -4,7 +4,7 @@ import Tasks from './Tasks.jsx';
 import TabSelector from './TabSelector.jsx';
 import Globaler from './global.jsx';
 import { useNavigate } from 'react-router-dom';
-
+import "dotenv/config";
 
 function App() {
     // Login routing:

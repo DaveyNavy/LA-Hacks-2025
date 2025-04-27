@@ -1,0 +1,25 @@
+
+.Home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+@keyframes blink {
+    0% {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: #333;
+    }
+
+    100% {
+        border-color: transparent;
+    }
+}
+
+.typewriter-text {
+    animation: blink 0.75s step-end infinite;
+}

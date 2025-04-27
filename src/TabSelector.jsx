@@ -3,6 +3,7 @@ import { Tabs, Tab, Box } from '@mui/material';
 import Tab1 from './bet.jsx';
 import Tab2 from './friends.jsx';
 import Tab3 from './leaderboard.jsx';
+import "dotenv/config";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
