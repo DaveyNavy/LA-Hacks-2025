@@ -18,20 +18,27 @@ const CompleteTaskPopup = ({ open, onClose, onSubmit, taskToComplete }) => {
         if (!form) return; // Ensure the form exists
         const formData = new FormData(form); // Collect form data
         try {
+
             const response = await fetch("http://localhost:3000/api/uploads", {
                 method: "POST",
                 body: formData,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
             });
 
+            const json = await response.json();
+            console.log(json);
+
+
             if (!response.ok) {
-                alert("Error uploading file");
+                alert("Error uploading file: " + json.message);
             } else {
                 // alert("File uploaded successfully");
                 console.log("File uploaded successfully");
                 onSubmit(taskid); // Call the onSubmit function with the task ID
                 onClose(); // Close the popup after submission
             }
-            console.log(await response.json());
 
         } catch (error) {
             console.error("Error:", error);

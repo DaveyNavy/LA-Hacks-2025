@@ -8,6 +8,7 @@ import multer from "multer";
 import { checkTaskComplete } from "./ai.js";
 import { getTaskDescription } from "./model/queries.js";
 import { unlink } from "node:fs";
+import { tasksCompletePost } from "./controllers/tasksController.js";
 
 // const upload = multer({ dest: "./public/data/uploads/" });
 const app = express();
@@ -54,10 +55,13 @@ app.post(
       console.log(req.file.path + " was deleted");
     });
 
-    if (result) {
+    if (result == "yes") {
+      res.setHeader("Authorization", req.headers.authorization);
+      await tasksCompletePost(req, res);
       res.status(200).json({ message: "File uploaded successfully" });
+
     } else {
-      res.status(400).json({ message: "File upload failed" });
+      res.status(400).json({ message: "File does not meet requirements." });
     }
   }
 );
