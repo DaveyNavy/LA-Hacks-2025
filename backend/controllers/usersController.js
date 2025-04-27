@@ -6,6 +6,7 @@ import {
   findAllUsersLike,
   createFriendRequest,
   getUserInfo,
+  getAllUsers,
 } from "../model/queries.js";
 
 const loginPagePost = async (req, res) => {
@@ -29,6 +30,13 @@ const loginPagePost = async (req, res) => {
 
 const registerPagePost = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
+
+  const users = await getAllUsers();
+  const usernames = users.map((user) => user.username);
+  if (usernames.includes(username)) {
+    console.log("Username already exists");
+    return res.status(400).send({ errors: [{ msg: "Username already exists" }] });
+  }
 
   if (password != confirmPassword)
     return res
@@ -64,6 +72,11 @@ const userRequestPost = async (req, res) => {
     }
   });
   const username = req.params.username;
+
+  if (username == user["username"]) {
+    return res.status(400).json({ error: "You cannot send a friend request to yourself" });
+  }
+
   await createFriendRequest(username, user["username"]);
   res.sendStatus(200);
 };
