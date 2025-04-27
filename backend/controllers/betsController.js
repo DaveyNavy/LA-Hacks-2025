@@ -50,6 +50,8 @@ const betsPagePost = async (req, res)  => {
     else {
         return res.status(400).json({ error: "Bad bet" });
     }
+
+    res.json({ message: "Bet placed successfully" });
 }
 
 export { betsPagePost };
