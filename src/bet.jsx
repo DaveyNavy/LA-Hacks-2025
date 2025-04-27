@@ -78,7 +78,7 @@ const Tab1 = () => {
                     setSelectedTask(null);
                     setOpenPopup(false);
                 }}
-                onSubmit={async (betAmount, dueDate, taskid) => {
+                onSubmit={async ({betAmount, dueDate, taskid}) => {
                     const data = await fetch(`${host_url}/api/bets/${taskid}`, {
                         method: "POST",
                         headers: {
