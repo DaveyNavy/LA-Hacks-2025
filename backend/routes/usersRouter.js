@@ -12,9 +12,9 @@ const usersRouter = Router();
 
 usersRouter.post("/login", loginPagePost);
 usersRouter.post("/register", registerPagePost);
+usersRouter.get("/self", verifyToken, currentUserGet);
 usersRouter.get("/:username", verifyToken, usersPageGet);
 usersRouter.post("/:username/request", verifyToken, userRequestPost);
 usersRouter.get("/:username/info", verifyToken, userInfoGet);
-usersRouter.get("/self", verifyToken, currentUserGet)
 
 export default usersRouter;
