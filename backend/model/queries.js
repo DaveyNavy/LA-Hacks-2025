@@ -29,6 +29,7 @@ async function createFriendRequest(username, requester) {
     username,
     requester,
   ]);
+  console.log("Done");
 }
 
 async function getAllTasks(username) {
@@ -103,6 +104,10 @@ async function respondToFriendRequest(username, requester, response) {
     await sql.query("INSERT INTO friends VALUES ($1, $2)", [
       username,
       requester,
+    ]);
+    await sql.query("INSERT INTO friends VALUES ($1, $2)", [
+      requester,
+      username,
     ]);
   }
   await sql.query(
