@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal, Box, TextField, Button } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { TimePicker } from '@mui/x-date-pickers';
+
 
 const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
     const [taskDescription, setTaskDescription] = useState(taskDesc || '');
@@ -11,12 +13,18 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
 
     const [dueDate, setDueDate] = useState(null);
 
+    let isSubmitting = false;
     const handleSubmit = async () => {
+        if (isSubmitting) return; // Prevent multiple submissions
+        isSubmitting = true;
+
         if (!taskDescription || !dueDate) {
             alert('Please fill in all fields.');
+            isSubmitting = false;
             return;
         }
         if (dueDate < new Date()) {
+            isSubmitting = false;
             alert('Due date cannot be in the past.');
             return;
         }
@@ -24,6 +32,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
         setTaskDescription('');
         setDueDate(null);
         onClose();
+        isSubmitting = false;
     };
 
     return (
@@ -62,7 +71,14 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
                         onChange={(newValue) => setDueDate(newValue)}
                         renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                     />
+                    <TimePicker
+                        label="Due Time"
+                        value={dueDate}
+                        onChange={(newValue) => setDueDate(newValue)}
+                        renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
+                    />
                 </LocalizationProvider>
+
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button onClick={onClose} sx={{ mr: 1 }}>
                         Cancel
