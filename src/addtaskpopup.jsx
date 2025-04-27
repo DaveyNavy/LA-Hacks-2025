@@ -4,7 +4,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimePicker } from '@mui/x-date-pickers';
 import { Typography } from '@mui/material';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { Globaler, host_url } from './global.jsx';
 
 
@@ -15,17 +15,15 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
         setTaskDescription(taskDesc || '');
     }, [taskDesc]);
 
-    const [dueDate, setDueDate] = useState(null);
-    const [textFieldValue, setTextFieldValue] = useState(format(now, 'yyyy-MM-dd HH:mm'));
+    const [dueDate, setDueDate] = useState(new Date(now.getTime() + 1 * 60 * 1000));
+    const [textFieldValue, setTextFieldValue] = useState(format(new Date(now.getTime() + 1 * 60 * 1000), 'yyyy-MM-dd HH:mm'));
     const handleTextFieldChange = (event) => {
         setTextFieldValue(event.target.value);
         try {
             const newDate = parseISO(event.target.value);
-            if (newDate >= now && newDate <= endDate) {
-                const newValue = differenceInSeconds(newDate, now);
-                setValue(newValue);
-            }
+            setDueDate(newDate);
         } catch (e) {
+            console.log(e);
             console.error("Invalid date format");
         }
     };
@@ -85,7 +83,7 @@ const AddTaskPopup = ({ open, onClose, onSubmit, taskDesc }) => {
                 <TextField
                     label="Select Date & Time"
                     type="datetime-local"
-                    value={dueDate}
+                    value={textFieldValue}
                     onChange={handleTextFieldChange}
                     InputLabelProps={{
                         shrink: true,
