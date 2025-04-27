@@ -6,5 +6,4 @@ Set-up:
 Run:
 `npm run dev`
 
-Font:
-`npm install @fontsource/poppins`
+Hosted at http://be-better.study
